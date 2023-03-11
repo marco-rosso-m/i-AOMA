@@ -155,6 +155,7 @@ def run():
         if ((count_sim_effective - starting_sim_num[2]) % BATCHNSIM == 0) and (count_sim_effective - starting_sim_num[2])!=0 \
            and (last_check_sim != count_sim_effective) :
             print('********** Check convergence criteria ********** \n')
+            print(f'Actual simulations so far: {count_sim_effective+1}')
             last_check_sim = count_sim_effective
             #  create attribute which join in a single array poles and modes SDresults.jointpolesmodes
             SDresults.jointpolesarray_and_modesarray() # SDresults.joint_col_names [ ['Frequency', 'Order', 'Label', 'Damp', 'Emme', 'ModeNum', 'SimNumber'], ['SimNumber','dof','dof','...'] ]

@@ -1,2 +1,2 @@
-# i-aoma
-i-aoma code
+# i-AOMA
+i-AOMA code

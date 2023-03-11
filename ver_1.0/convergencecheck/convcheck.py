@@ -62,7 +62,7 @@ class ConvCheck():
                 tmp_damp_std[jj, pp] = np.std(tmp[:,3])
         tmp_modes_trace_covariance_rel_diff = np.divide( np.diff(tmp_modes_trace_covariance, axis=0) , tmp_modes_trace_covariance[:-1] )
 
-        if (tmp_modes_trace_covariance_rel_diff < CONVMCTHRESH).all() :
+        if (abs(tmp_modes_trace_covariance_rel_diff) <= CONVMCTHRESH).all() :
             convergence_reached = 1
         
         # updates values

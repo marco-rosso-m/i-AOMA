@@ -4,10 +4,11 @@ import pandas as pd
 import pickle
 import matplotlib.pyplot as plt
 import numpy as np
-# from PyOMA import FDDsvp
 from scipy import signal as signalscipy
 from matplotlib.ticker import (MultipleLocator, FormatStrFormatter)
-import mplcursors
+
+
+from ext_modules.mplcursors import _mplcursors as mplcursors
 
 
 def create_results_folder(RESULTS_PATH):
@@ -17,8 +18,11 @@ def create_results_folder(RESULTS_PATH):
 def import_data(DATA_FILE: str):
     _, file_extension = os.path.splitext(DATA_FILE)
 
-    if file_extension == '.csv' or file_extension == '.txt':
+    if file_extension == '.txt':
         data = pd.read_csv(DATA_FILE, header=None, sep="\s+", index_col=False) 
+        data = data.to_numpy()
+    elif file_extension == '.csv':
+        data = pd.read_csv(DATA_FILE, header=None, index_col=False) 
         data = data.to_numpy()
     elif file_extension == '.pkl':
         with open(DATA_FILE, 'rb') as f:

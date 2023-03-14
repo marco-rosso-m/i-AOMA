@@ -12,7 +12,6 @@ Created on March 6 2023
 # %% Import modules
 import pandas as pd
 import numpy as np
-import pickle
 import matplotlib.pyplot as plt
 plt.rcParams.update({'font.size': 12})
 plt.rcParams['font.family'] = 'Poppins'
@@ -118,8 +117,11 @@ def run():
     last_check_sim = count_sim_effective
 
     create_results_folder(RESULTS_PATH+'/Phase2')
-    # create_results_folder(RESULTS_PATH+'/Phase2/Backup_convergence_checks') #???? not implemented for now because saving results will slow down the code
-    
+    create_results_folder(RESULTS_PATH+'/Phase2/Backup_convergence_checks') #???? not implemented for now because saving results will slow down the code
+
+    create_results_folder(RESULTS_PATH+f'/Phase2/Backup_convergence_checks/{count_sim_effective+1}') # comment it after checking everything is correct 
+    modesconv.plot_convergence_curves(CONVMCTHRESH, RESULTS_PATH+f'/Phase2/Backup_convergence_checks/{count_sim_effective+1}') # comment it after checking everything is correct 
+
     while continueMCsim and (count_sim_effective < (MAX_NUM_MC_SIM_PHASE_1 + MAX_NUM_MC_SIM_PHASE_2 -1)) :
         try:
             count_sim += 1
@@ -156,16 +158,23 @@ def run():
            and (last_check_sim != count_sim_effective) :
             print('********** Check convergence criteria ********** \n')
             print(f'Actual simulations so far: {count_sim_effective+1}')
-            last_check_sim = count_sim_effective
+
+            create_results_folder(RESULTS_PATH+f'/Phase2/Backup_convergence_checks/{count_sim_effective+1}')
+
+            
             #  create attribute which join in a single array poles and modes SDresults.jointpolesmodes
             SDresults.jointpolesarray_and_modesarray() # SDresults.joint_col_names [ ['Frequency', 'Order', 'Label', 'Damp', 'Emme', 'ModeNum', 'SimNumber'], ['SimNumber','dof','dof','...'] ]
-            kdeSD = Kde(SDresults.jointpolesmodes, fs, KDEPROMINENCE)
-            # kdeSD.plot_kde_freq(RESULTS_PATH+'/Phase2/Backup_convergence_checks') # comment it after checking everything is correct 
+            kdeSD.select_peaks_phase_two(SDresults.jointpolesmodes)
+            kdeSD.plot_kde_freq(RESULTS_PATH+f'/Phase2/Backup_convergence_checks/{count_sim_effective+1}') # comment it after checking everything is correct 
             kdeSD.select_modes_clusters()
-            # kdeSD.plot_select_modes_clusters(RESULTS_PATH+'/Phase2/Backup_convergence_checks') # comment it after checking everything is correct 
+            kdeSD.plot_select_modes_clusters(RESULTS_PATH+f'/Phase2/Backup_convergence_checks/{count_sim_effective+1}') # comment it after checking everything is correct 
 
-            convergence_reached = modesconv.update_converg_sim(kdeSD.Frequency_dataset, count_sim_effective, CONVMCTHRESH)
-            
+            convergence_reached = modesconv.update_converg_sim(kdeSD.Frequency_dataset, count_sim_effective, last_check_sim, CONVMCTHRESH)
+
+            modesconv.plot_convergence_curves(CONVMCTHRESH, RESULTS_PATH+f'/Phase2/Backup_convergence_checks/{count_sim_effective+1}') # comment it after checking everything is correct 
+
+            last_check_sim = count_sim_effective
+
             if convergence_reached:
                 print('********** Stopping criteria reached! ********** \n\n')
                 continueMCsim=0

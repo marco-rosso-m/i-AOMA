@@ -30,7 +30,20 @@ class Kde():
             self.KDEPROMINENCE = beta.ppf(0.99, self.alpha_par, self.beta_par, loc=self.a, scale=self.bminusa)
         # find peaks according to prominence threshold
         self.peaksFFTKDE, _ = find_peaks(self.ynorm, prominence=self.KDEPROMINENCE) 
-        
+
+    def select_peaks_phase_two(self, jointpolesmodes):
+        # columns ['Frequency', 'Order', 'Label', 'Damp', 'Emme', 'ModeNum', 'SimNumber',   'SimNumber','dof','dof','...' ]
+        self.jointpolesmodes = jointpolesmodes
+        # Sort the entire array according to the first column
+        self.jointpolesmodes = self.jointpolesmodes[self.jointpolesmodes[:, 0].argsort()]
+        # Train KDE with automatic bw ISJ algorithm
+        self.KDE = FFTKDE(kernel='gaussian', bw='ISJ').fit(self.jointpolesmodes[:,0])
+        self.bw = self.KDE.bw
+        self.x, self.y = self.KDE.evaluate(int(self.fs/2*1000))
+        self.ynorm = self.y / max(self.y)
+
+        # find peaks according to prominence threshold
+        self.peaksFFTKDE, _ = find_peaks(self.ynorm, prominence=self.KDEPROMINENCE) 
 
     def select_modes_clusters(self):
         self.KDEbwFactor = 0

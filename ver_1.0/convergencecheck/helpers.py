@@ -120,9 +120,9 @@ def plot_trace(modes_trace_covariance, modes_trace_covariance_rel_diff, freq_mea
     fig,ax=plt.subplots(figsize=(10,4))
     fig2,ax2=plt.subplots(figsize=(10,4))
     for jj in range(modes_trace_covariance.shape[1]):
-        ax.plot(np.arange(1,modes_trace_covariance.shape[0]+1), modes_trace_covariance[:,jj],
+        ax.plot(np.arange(1,modes_trace_covariance.shape[0]+1), modes_trace_covariance[:,jj],'o-',
                  label=f'Mode at {freq_mean[jj]:.2f} Hz', lw=3)
-        ax2.plot(np.arange(1,modes_trace_covariance_rel_diff.shape[0]+1), modes_trace_covariance_rel_diff[:,jj],
+        ax2.plot(np.arange(2,modes_trace_covariance_rel_diff.shape[0]+2), modes_trace_covariance_rel_diff[:,jj],'o-',
                  label=f'Mode at {freq_mean[jj]:.2f} Hz', lw=1)
     # ax.xaxis.set_major_locator(mticker.MultipleLocator(1)); ax2.xaxis.set_major_locator(mticker.MultipleLocator(1))
     ax.xaxis.set_major_formatter(FormatStrFormatter('%d')); ax2.xaxis.set_major_formatter(FormatStrFormatter('%d'))
@@ -133,10 +133,10 @@ def plot_trace(modes_trace_covariance, modes_trace_covariance_rel_diff, freq_mea
     ax.set_xlabel('Actually conducted simulations')
     fig.tight_layout()
 
-    ax2.plot(np.arange(1,modes_trace_covariance_rel_diff.shape[0]+1), CONVMCTHRESH*np.ones(modes_trace_covariance_rel_diff.shape[0]),
+    ax2.plot(np.arange(2,modes_trace_covariance_rel_diff.shape[0]+2), CONVMCTHRESH*np.ones(modes_trace_covariance_rel_diff.shape[0]),
              'b--',label='Band $\pm$2%')
-    ax2.plot(np.arange(1,modes_trace_covariance_rel_diff.shape[0]+1), -CONVMCTHRESH*np.ones(modes_trace_covariance_rel_diff.shape[0]),'b--')
-    ax2.fill_between(np.arange(1,modes_trace_covariance_rel_diff.shape[0]+1), CONVMCTHRESH*np.ones(modes_trace_covariance_rel_diff.shape[0]),
+    ax2.plot(np.arange(2,modes_trace_covariance_rel_diff.shape[0]+2), -CONVMCTHRESH*np.ones(modes_trace_covariance_rel_diff.shape[0]),'b--')
+    ax2.fill_between(np.arange(2,modes_trace_covariance_rel_diff.shape[0]+2), CONVMCTHRESH*np.ones(modes_trace_covariance_rel_diff.shape[0]),
                      -CONVMCTHRESH*np.ones(modes_trace_covariance_rel_diff.shape[0]), color='yellow', alpha=0.5)
     # plt.fill_betweenx([-0.1,0.1], 500, 550, color='#63C7B2',alpha=0.5)
     # plt.text(380, -0.045, 'Convergence ASCBR', fontsize=12,color='#63C7B2',fontweight='bold')
@@ -146,8 +146,8 @@ def plot_trace(modes_trace_covariance, modes_trace_covariance_rel_diff, freq_mea
     ax2.set_xlabel('Actually conducted simulations')
     fig2.tight_layout()
 
-    fig.savefig(RESULTS_PATH + f'/Trace covariance matrix Convergence.png', format='png', dpi=300)
-    fig2.savefig(RESULTS_PATH + f'/Relative difference on trace covariance matrix.png', format='png', dpi=300)
+    fig.savefig(RESULTS_PATH + f'/Trace_covariance_matrix_Convergence.png', format='png', dpi=300)
+    fig2.savefig(RESULTS_PATH + f'/Relative_difference_on_trace_covariance_matrix.png', format='png', dpi=300)
 
     plt.close('all')
 

@@ -13,7 +13,7 @@ FUNDAMENTAL_FREQUENCY = 1.0
 
 # Monte Carlo settings:
 MAX_NUM_MC_SIM_PHASE_1 = 5
-MAX_NUM_MC_SIM_PHASE_2 = 2
+MAX_NUM_MC_SIM_PHASE_2 = 16
 
 # Mode shape normalization
 # accepted: integer of specific dof otherwise a string 'max'
@@ -28,7 +28,7 @@ KDEPROMINENCE = 'automatic' # 0.1
 ICTHRESH = 0.10
 
 # i-AOMA PHASE 2
-BATCHNSIM = 2          # evaluate the convergence every 50 analyses
+BATCHNSIM = 4          # evaluate the convergence every 50 analyses
 CONVMCTHRESH = 0.02    # track relative differences covariance matrix within +-2% for
                        # acceptable shifting convergence band rule (ASCBR) 
 

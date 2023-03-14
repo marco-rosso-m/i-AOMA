@@ -31,26 +31,26 @@ class ConvCheck():
                 self.damp_mean[jj, pp] = np.mean(tmp[:,3])
                 self.damp_std[jj, pp] = np.std(tmp[:,3])
 
-        self.modes_trace_covariance_rel_diff = np.divide( np.diff(self.modes_trace_covariance, axis=0) , self.modes_trace_covariance[:-1] )
+        self.modes_trace_covariance_rel_diff = np.divide( np.diff(self.modes_trace_covariance, axis=0) , abs(self.modes_trace_covariance[:-1]) )
 
         # helper command: np.savetxt('A.txt', Frequency_dataset[pp][Frequency_dataset[pp][:,6].argsort()], fmt='%.4f') 
 
-    def update_converg_sim(self, Frequency_dataset, count_sim_effective, CONVMCTHRESH):
+    def update_converg_sim(self, Frequency_dataset, count_sim_effective, last_check_sim, CONVMCTHRESH):
         convergence_reached = 0
-        tmp_count = count_sim_effective + 1
-        tmp_modes_mean = np.zeros( (tmp_count - self.MAX_NUM_MC_SIM_PHASE_1, self.frequency_num_clusters, self.numdofs) )
-        tmp_modes_std = np.zeros( (tmp_count - self.MAX_NUM_MC_SIM_PHASE_1, self.frequency_num_clusters, self.numdofs) )
-        tmp_modes_trace_covariance = np.zeros( (tmp_count - self.MAX_NUM_MC_SIM_PHASE_1, self.frequency_num_clusters) )
+        tmp_count = count_sim_effective - last_check_sim
+        tmp_modes_mean = np.zeros( (tmp_count, self.frequency_num_clusters, self.numdofs) )
+        tmp_modes_std = np.zeros( (tmp_count, self.frequency_num_clusters, self.numdofs) )
+        tmp_modes_trace_covariance = np.zeros( (tmp_count, self.frequency_num_clusters) )
 
-        tmp_freq_mean = np.zeros( (tmp_count - self.MAX_NUM_MC_SIM_PHASE_1, self.frequency_num_clusters) )
-        tmp_freq_std = np.zeros( (tmp_count - self.MAX_NUM_MC_SIM_PHASE_1, self.frequency_num_clusters) )
+        tmp_freq_mean = np.zeros( (tmp_count, self.frequency_num_clusters) )
+        tmp_freq_std = np.zeros( (tmp_count, self.frequency_num_clusters) )
 
-        tmp_damp_mean = np.zeros( (tmp_count - self.MAX_NUM_MC_SIM_PHASE_1, self.frequency_num_clusters) )
-        tmp_damp_std = np.zeros( (tmp_count - self.MAX_NUM_MC_SIM_PHASE_1, self.frequency_num_clusters) )
+        tmp_damp_mean = np.zeros( (tmp_count, self.frequency_num_clusters) )
+        tmp_damp_std = np.zeros( (tmp_count, self.frequency_num_clusters) )
 
 
         for pp in range(len(Frequency_dataset)): # pp cycle for each founded mode clusters
-            for jj, Nsim in enumerate(np.arange(self.MAX_NUM_MC_SIM_PHASE_1,tmp_count)): # jj is index 0, 1, ... , whereas Nsim is the actual number of sim in that batch
+            for jj, Nsim in enumerate(np.arange(last_check_sim+1, count_sim_effective+1)): # jj is index 0, 1, ... , whereas Nsim is the actual number of sim in that batch
                 tmp = Frequency_dataset[pp][ Frequency_dataset[pp][:,6] <= Nsim]
                 tmp_modes_mean[jj, pp, :] = np.mean(tmp[:,8:], axis=0)
                 tmp_modes_std[jj, pp, :] = np.std(tmp[:,8:], axis=0)
@@ -60,9 +60,11 @@ class ConvCheck():
                 tmp_freq_std[jj, pp] = np.std(tmp[:,0])
                 tmp_damp_mean[jj, pp] = np.mean(tmp[:,3])
                 tmp_damp_std[jj, pp] = np.std(tmp[:,3])
-        tmp_modes_trace_covariance_rel_diff = np.divide( np.diff(tmp_modes_trace_covariance, axis=0) , tmp_modes_trace_covariance[:-1] )
+        tmp_modes_trace_covariance_rel_diff = np.divide( np.diff(np.vstack( (self.modes_trace_covariance[-1], tmp_modes_trace_covariance) ) ,axis=0) , \
+                                                         abs(tmp_modes_trace_covariance) )
 
-        if (abs(tmp_modes_trace_covariance_rel_diff) <= CONVMCTHRESH).all() :
+        # if (abs(tmp_modes_trace_covariance_rel_diff) <= CONVMCTHRESH).all() :
+        if (np.nan_to_num(abs(tmp_modes_trace_covariance_rel_diff), copy=True, nan=0.0, posinf=None, neginf=None) <= CONVMCTHRESH).all() :
             convergence_reached = 1
         
         # updates values

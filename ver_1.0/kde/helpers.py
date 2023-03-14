@@ -5,7 +5,7 @@ import numpy as np
 
 
 def plot_selected_frequency_clusters(self, RESULTS_PATH):
-    fig1, ax1 = plt.subplots(figsize=(10,3))
+    fig1, ax1 = plt.subplots(figsize=(10,3),facecolor='white')
     for ii in range(len(self.Freqinter)):   # col 0 = 'Frequency'                 # col 1 = 'Order'
         ax1 = sns.scatterplot(x=self.Frequency_dataset[ii][:,0], y=self.Frequency_dataset[ii][:,1]*2, 
             label=f'Mode {ii+1}: {np.mean(self.Frequency_dataset[ii][:,0]):.2f} Hz; Num. Poles: {self.Frequency_dataset[ii][:,0].shape[0]}')
@@ -32,7 +32,7 @@ def count_num_effective_poles_for_each_simulation(selectedpoles_totnum,Frequency
     return count_num_effective_poles_sim
 
 def plot_IC_graph(IC, MAX_NUM_MC_SIM, ICTHRESH, RESULTS_PATH):
-    fig,ax=plt.subplots(figsize=(10,4))
+    fig,ax=plt.subplots(figsize=(10,4),facecolor='white')
     plt.plot(np.arange(1,MAX_NUM_MC_SIM+2), IC,
              color='#023e7d', linestyle='None', marker='.',ms=5,label='IC for Analysis actually conducted')
     plt.plot(np.arange(1,MAX_NUM_MC_SIM+2), np.ones((MAX_NUM_MC_SIM+1))*ICTHRESH,'r--',label='IC threshold',lw=2)

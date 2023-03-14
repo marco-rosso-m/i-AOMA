@@ -292,7 +292,7 @@ def SSIcovStaDiag(data, fs, br, ordmax=None,
     # assigning colours to the labels
     # _colors = {0:'Red', 1:'darkorange', 2:'gold', 3:'yellow', 4:'Green'} 
     
-    # fig1, ax1 = plt.subplots()
+    # fig1, ax1 = plt.subplots(facecolor='white')
     # ax1 = sns.scatterplot(x=df2['Frequency'], y=df2['Order']*2, hue=df2['Label'], palette=_colors)
     
     # ax1.set_xlim(left=0, right=freq_max)
@@ -339,7 +339,7 @@ def plot_kde_estimate_sampled_parameters(x, y, labels, RESULTS_PATH):
     values = np.vstack([x, y])
     kernel = st.gaussian_kde(values)
     f = np.reshape(kernel(positions).T, xx.shape)
-    fig, ax = plt.subplots(figsize=(4,4))
+    fig, ax = plt.subplots(figsize=(4,4),facecolor='white')
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(ymin, ymax)
     # Contourf plot

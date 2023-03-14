@@ -23,7 +23,7 @@ def plotModeShape2D(_nodes, _connectivity, ax, color='black',style='solid',annot
             
 def plot_modes_for_2d(modes_mean, modes_std, freq_mean, _nodes, _connectivity, MODESCALEFCT, MODESTDFCT, MODE2D_DIRECTION, RESULTS_PATH):
     for ii in range(modes_mean.shape[0]):
-        fig,ax = plt.subplots(figsize=(6,5))
+        fig,ax = plt.subplots(figsize=(6,5),facecolor='white')
         plotModeShape2D(_nodes, _connectivity, ax, color='black', style='dashed', annotFlag=True)
         ax.set_xlabel('x [m]')
         ax.set_ylabel('z [m]')
@@ -71,7 +71,7 @@ def plotModeShape3D(nodes, connectivity, annotatepoints=0, color='black', style=
     #     _fig=plt.gcf()
     #     ax=plt.gca()
     # else:
-    #     _fig = plt.figure(figsize=figsize)
+    #     _fig = plt.figure(figsize=figsize,facecolor='white')
     #     ax = plt.axes(projection="3d")
     #     setattr(ax, 'annotate3D', drawing_tools_3d.annotate3d)
     # for k in range(num_frames):
@@ -117,8 +117,8 @@ def plot_modes_for_3d():
 
 
 def plot_trace(modes_trace_covariance, modes_trace_covariance_rel_diff, freq_mean, CONVMCTHRESH, RESULTS_PATH):
-    fig,ax=plt.subplots(figsize=(10,4))
-    fig2,ax2=plt.subplots(figsize=(10,4))
+    fig,ax=plt.subplots(figsize=(10,4),facecolor='white')
+    fig2,ax2=plt.subplots(figsize=(10,4),facecolor='white')
     for jj in range(modes_trace_covariance.shape[1]):
         ax.plot(np.arange(1,modes_trace_covariance.shape[0]+1), modes_trace_covariance[:,jj],'o-',
                  label=f'Mode at {freq_mean[jj]:.2f} Hz', lw=3)
@@ -152,8 +152,8 @@ def plot_trace(modes_trace_covariance, modes_trace_covariance_rel_diff, freq_mea
     plt.close('all')
 
 def plot_frequency_conv(freq_mean, freq_std, RESULTS_PATH):
-    fig,ax=plt.subplots(figsize=(10,4))
-    fig2,ax2=plt.subplots(figsize=(10,4))
+    fig,ax=plt.subplots(figsize=(10,4),facecolor='white')
+    fig2,ax2=plt.subplots(figsize=(10,4),facecolor='white')
     for jj in range(freq_mean.shape[1]):
         ax.plot(np.arange(1,freq_mean.shape[0]+1), freq_mean[:,jj],
                 label=f'Mode at {freq_mean[-1,jj]:.2f} Hz',lw=3) 
@@ -179,8 +179,8 @@ def plot_frequency_conv(freq_mean, freq_std, RESULTS_PATH):
     plt.close('all')
 
 def plot_damp_conv(damp_mean, damp_std, freq_mean, RESULTS_PATH):
-    fig,ax=plt.subplots(figsize=(10,4))
-    fig2,ax2=plt.subplots(figsize=(10,4))
+    fig,ax=plt.subplots(figsize=(10,4),facecolor='white')
+    fig2,ax2=plt.subplots(figsize=(10,4),facecolor='white')
     for jj in range(damp_mean.shape[1]):
         ax.plot(np.arange(1,damp_mean.shape[0]+1), damp_mean[:,jj],
                 label=f'Mode at {freq_mean[jj]:.2f} Hz',lw=3) 

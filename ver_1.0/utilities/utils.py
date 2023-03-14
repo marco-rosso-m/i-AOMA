@@ -35,7 +35,7 @@ def visualize_plot_signals(data, PLOTSIGNALS, RESULTS_PATH, SAMPLING_FREQUENCY, 
     fs=SAMPLING_FREQUENCY
     time_units, vibration_units=labelsformat[0],labelsformat[1]
     if PLOTSIGNALS:
-        plt.figure()
+        plt.figure(facecolor='white')
         for ii in range(data.shape[1]):
             plt.plot(np.arange(start=0,stop=data.shape[0]/fs,step=1/fs),data[:,ii],label=f'channel {ii+1}')
         plt.legend(loc='best');plt.xlabel(time_units);plt.ylabel(vibration_units)
@@ -108,7 +108,7 @@ def FDDsvp(data, fs, df=0.01, pov=0.5, window='hann'):
         S_vec[:,:,_i] = U1_1
     
     # Plot of the singular values in log scale
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(facecolor='white')
     for _i in range(nch):
     #    ax.semilogy(_f, S_val[_i, _i]) # scala log
         ax.plot(_f[:], 10*np.log10(S_val[_i, _i])) # decibel

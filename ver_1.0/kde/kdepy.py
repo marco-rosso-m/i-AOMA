@@ -84,7 +84,7 @@ class Kde():
         plot_IC_graph(self.IC, MAX_NUM_MC_SIM, ICTHRESH, RESULTS_PATH)
 
     def plot_kde_freq(self, RESULTS_PATH):
-        fig1, ax1 = plt.subplots(figsize=(10,3))
+        fig1, ax1 = plt.subplots(figsize=(10,3),facecolor='white')
         plt.plot(self.x, self.ynorm, label='KDE',lw=2,color='#023e7d')
         plt.plot(self.x[self.peaksFFTKDE], self.ynorm[self.peaksFFTKDE], color='r', linestyle='None', marker='2',ms=15,lw=10)
         # Add markers and corresponding text by looping through the 

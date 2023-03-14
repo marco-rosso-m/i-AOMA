@@ -41,7 +41,7 @@ class SdRes():
         if PLOT_OVERLAPPED_SD:
 
             _colors = {0:'Red', 1:'darkorange', 2:'gold', 3:'yellow', 4:'Green'} 
-            fig1, ax1 = plt.subplots(figsize=(10,5))
+            fig1, ax1 = plt.subplots(figsize=(10,5),facecolor='white')
             ax1 = sns.scatterplot(x=self.ReducedPoles[:,0], y=self.ReducedPoles[:,1]*2, hue=self.ReducedPoles[:,2], palette=_colors, legend=False)
             ax1 = sns.scatterplot(x=self.selectedpoles[:,0], y=self.selectedpoles[:,1]*2, color='None',s=40,linewidth=0.1, edgecolor="#023e7d",legend=False)
 
@@ -65,7 +65,7 @@ class SdRes():
         if PLOT_OVERLAPPED_SD:
 
             _colors = {0:'Red', 1:'darkorange', 2:'gold', 3:'yellow', 4:'Green'} 
-            fig1, ax1 = plt.subplots(figsize=(10,5))
+            fig1, ax1 = plt.subplots(figsize=(10,5),facecolor='white')
             ax1 = sns.scatterplot(x=self.selectedpoles[:,0], y=self.selectedpoles[:,1]*2, hue=self.selectedpoles[:,2], palette=_colors, legend=False)
 
             plt.xlim(left=0, right=fs/2)

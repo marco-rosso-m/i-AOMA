@@ -36,6 +36,9 @@ def run():
 
     data, fs = datadecimate(data, fs=SAMPLING_FREQUENCY, q=DECIMATION_FACTOR) #fs: [Hz] Decimated sampling frequency
 
+    if DATAFILTERING:
+        data = datafiltering(data, fs, BUTTERWORTH_DESIGN)
+
     visualize_plot_signals(data, PLOTSIGNALS, RESULTS_PATH+'/Phase1', fs, SAVEPLOTSIGNALS, labelsformat=['Time [s]','Acceleration [mm/s^2]'])
     svPSD = visualize_plot_PSD(data, PLOTSVDOFPSD, RESULTS_PATH+'/Phase1', fs, SAVEPLOTSVDOFPSD)
 
@@ -186,7 +189,7 @@ def run():
 
     print(f'Simulations evaluated in total {count_sim+1}:\n' + \
           f'Phase 1: Simulations {starting_sim_num[0]+1}, discarding {starting_sim_num[1]}, collecting {MAX_NUM_MC_SIM_PHASE_1} useful results \n' + \
-          f'Phase 2: Simulations {(count_sim-starting_sim_num[0])}, intelligently discarding {(len(discardedpar)-starting_sim_num[1])}, collecting {MAX_NUM_MC_SIM_PHASE_2} useful results \n\n')
+          f'Phase 2: Simulations {(count_sim-starting_sim_num[0])}, intelligently discarding {(len(discardedpar)-starting_sim_num[1])}, collecting {count_sim_effective-starting_sim_num[2]} useful results \n\n')
 
     # Export results
     RF.save_prediction_to_file(RESULTS_PATH+'/Phase2')

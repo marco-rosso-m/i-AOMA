@@ -58,6 +58,7 @@ class SdRes():
                             Line2D([0], [0], marker='o', color='w', lw=0, markeredgecolor='#023e7d', markerfacecolor=None, label='Selected')]
             ax1.legend(handles=legend_elements, loc='lower right',framealpha=0.95,title="Labels:")
             plt.savefig(RESULTS_PATH+f"/Overlapped_SD.png", dpi=150)
+            plt.savefig(RESULTS_PATH+f"/Overlapped_SD.pdf")
             # plt.show()
             plt.close()
 
@@ -76,6 +77,7 @@ class SdRes():
             legend_elements = [Line2D([0], [0], marker='o', color=_colors[4], lw=0, label='4')]
             ax1.legend(handles=legend_elements, loc='lower right',framealpha=0.95,title="Labels:")
             plt.savefig(RESULTS_PATH+f"/Overlapped_SD_stables.png", dpi=150)
+            plt.savefig(RESULTS_PATH+f"/Overlapped_SD_stables.pdf")
             # plt.show()
             plt.close()
     

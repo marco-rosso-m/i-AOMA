@@ -349,6 +349,7 @@ def plot_kde_estimate_sampled_parameters(x, y, labels, RESULTS_PATH):
     cbar = fig.colorbar(cfset)
     fig.tight_layout()
     fig.savefig(RESULTS_PATH+f"/2dPDF_{labels[0]}_{labels[1]}.png", dpi=300)
+    fig.savefig(RESULTS_PATH+f"/2dPDF_{labels[0]}_{labels[1]}.pdf")
     plt.close()
 
 

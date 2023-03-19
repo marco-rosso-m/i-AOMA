@@ -26,6 +26,7 @@ from qmc.qmc_sampling import QmcSampler
 from kde.kdepy import Kde
 from rfcore.RFcore import RfCore
 from convergencecheck.convcheck import ConvCheck
+from plotting_fns.plot_mode_shapes import *
 
 
 # %% Run current script
@@ -39,8 +40,8 @@ def run():
     if DATAFILTERING:
         data = datafiltering(data, fs, BUTTERWORTH_DESIGN)
 
-    visualize_plot_signals(data, PLOTSIGNALS, RESULTS_PATH+'/Phase1', fs, SAVEPLOTSIGNALS, labelsformat=['Time [s]','Acceleration [mm/s^2]'])
-    svPSD = visualize_plot_PSD(data, PLOTSVDOFPSD, RESULTS_PATH+'/Phase1', fs, SAVEPLOTSVDOFPSD)
+    visualize_plot_signals(data, PLOTSIGNALS, RESULTS_PATH+'/Phase1', fs, SAVEPLOTSIGNALS, labelsformat=['Time [s]','Acceleration [mm/s^2]'], LEGEND_KWARGS_PLOTSIGNALS=LEGEND_KWARGS_PLOTSIGNALS)
+    svPSD = visualize_plot_PSD(data, PLOTSVDOFPSD, RESULTS_PATH+'/Phase1', fs, SAVEPLOTSVDOFPSD, LEGEND_KWARGS_PLOTSVD)
 
 # i-AOMA Phase 1 
     print('\n\ni-AOMA phase 1: EXPLORATIVE MC SSI-cov SIMULATIONS\n')
@@ -98,7 +99,7 @@ def run():
     kdeSD = Kde(SDresults.jointpolesmodes, fs, KDEPROMINENCE)
     kdeSD.plot_kde_freq(RESULTS_PATH+'/Phase1')
     kdeSD.select_modes_clusters()
-    kdeSD.plot_select_modes_clusters(RESULTS_PATH+'/Phase1')
+    kdeSD.plot_select_modes_clusters(RESULTS_PATH+'/Phase1', LEGEND_KWARGS_PLOTFREQCLUSTERS)
     print(f'Found {kdeSD.peaksFFTKDE.shape[0]:d} peaks at {kdeSD.x[kdeSD.peaksFFTKDE]} Hz with prominence of {kdeSD.KDEPROMINENCE:.4f}.\n')
     print(f'Found {len(kdeSD.Frequency_dataset):d} poles clusters within {kdeSD.KDEbwFactor:d} times the bandwidth of {kdeSD.bw:.4f} Hz.\n')
     # IC
@@ -170,7 +171,7 @@ def run():
             kdeSD.select_peaks_phase_two(SDresults.jointpolesmodes)
             kdeSD.plot_kde_freq(RESULTS_PATH+f'/Phase2/Backup_convergence_checks/{count_sim_effective+1}') # comment it after checking everything is correct 
             kdeSD.select_modes_clusters()
-            kdeSD.plot_select_modes_clusters(RESULTS_PATH+f'/Phase2/Backup_convergence_checks/{count_sim_effective+1}') # comment it after checking everything is correct 
+            kdeSD.plot_select_modes_clusters(RESULTS_PATH+f'/Phase2/Backup_convergence_checks/{count_sim_effective+1}', LEGEND_KWARGS_PLOTFREQCLUSTERS) # comment it after checking everything is correct 
 
             convergence_reached = modesconv.update_converg_sim(kdeSD.Frequency_dataset, count_sim_effective, last_check_sim, CONVMCTHRESH)
 
@@ -197,7 +198,7 @@ def run():
     SDresults.plot_overlapped_SD_stable(fs,PLOT_OVERLAPPED_SD, RESULTS_PATH+'/Phase2')
     SDresults.export_results_to_file(RESULTS_PATH+'/Phase2')
     kdeSD.plot_kde_freq(RESULTS_PATH+'/Phase2') 
-    kdeSD.plot_select_modes_clusters(RESULTS_PATH+'/Phase2') 
+    kdeSD.plot_select_modes_clusters(RESULTS_PATH+'/Phase2', LEGEND_KWARGS_PLOTFREQCLUSTERS) 
     print(f'Found {kdeSD.peaksFFTKDE.shape[0]:d} peaks at {kdeSD.x[kdeSD.peaksFFTKDE]} Hz with prominence of {kdeSD.KDEPROMINENCE:.4f}.\n')
     print(f'Found {len(kdeSD.Frequency_dataset):d} poles clusters within {kdeSD.KDEbwFactor:d} times the bandwidth of {kdeSD.bw:.4f} Hz.\n')
     # IC
@@ -211,13 +212,18 @@ def run():
     create_results_folder(RESULTS_PATH+'/Phase2/Convergence_Analysis')
     create_results_folder(RESULTS_PATH+'/Phase2/Intelligent_sampling_maps')
 
-    nodes = pd.read_csv(NODESFILE, header=None, sep="\s+", index_col=False).to_numpy()
-    connectivity = pd.read_csv(CONNECTIVITYFILE, header=None, sep="\s+", index_col=False).to_numpy()
+    nodes = import_data(NODESFILE).astype('float64')
+    connectivity = import_data(CONNECTIVITYFILE)
+    connectivity_mode_shape_dofs = import_data(MONITORED_DOF_FILE)
 
-    modesconv.plot_mode_shapes(N_DIM, nodes, connectivity, MODESCALEFCT, MODESTDFCT, MODESTDFCT_ELLIPSES, MODE2D_DIRECTION, RESULTS_PATH+'/Phase2/Mode_shapes')
+    modesconv.plot_mode_shapes(N_DIM, nodes, connectivity, connectivity_mode_shape_dofs, \
+                               MODESCALEFCT, MODESTDFCT, MODESTDFCT_ELLIPSES, MODE_SHAPE_PAPER, RESULTS_PATH+'/Phase2/Mode_shapes')
     modesconv.plot_convergence_curves(CONVMCTHRESH, RESULTS_PATH+'/Phase2/Convergence_Analysis')
     SDresults.plot_sampling_maps(RESULTS_PATH+'/Phase2/Intelligent_sampling_maps')
 
+    if N_DIM==3 and MODE_SHAPE_PAPER!=None:
+        Pearson_coeff = plot_ellipses(nodes, connectivity, connectivity_mode_shape_dofs, modesconv.modes_mean[-1], kdeSD.Frequency_dataset, \
+                                      MODESTDFCT_ELLIPSES, MODESCALEFCT, RESULTS_PATH+'/Phase2/Mode_shapes')
 
     return SDresults, kdeSD, modesconv
 

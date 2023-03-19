@@ -1,5 +1,6 @@
 import numpy as np
 from convergencecheck.helpers import *
+from plotting_fns.plot_mode_shapes import *
 
 class ConvCheck():
     def __init__(self, Frequency_dataset, MAX_NUM_MC_SIM_PHASE_1):
@@ -65,7 +66,7 @@ class ConvCheck():
 
         # if (abs(tmp_modes_trace_covariance_rel_diff) <= CONVMCTHRESH).all() :
         if (np.nan_to_num(abs(tmp_modes_trace_covariance_rel_diff), copy=True, nan=0.0, posinf=None, neginf=None) <= CONVMCTHRESH).all() :
-            convergence_reached = 1
+                convergence_reached = 1
         
         # updates values
         self.modes_trace_covariance_rel_diff = np.vstack( (self.modes_trace_covariance_rel_diff, tmp_modes_trace_covariance_rel_diff) )
@@ -99,12 +100,23 @@ class ConvCheck():
         with open(RESULTS_PATH+'/damp_std.npy', 'wb') as f:
                 np.save(f, self.damp_std)
 
-    def plot_mode_shapes(self, N_DIM, nodes, connectivity, MODESCALEFCT, MODESTDFCT, MODESTDFCT_ELLIPSES, MODE2D_DIRECTION, RESULTS_PATH):
+    def plot_mode_shapes(self, N_DIM, nodes, connectivity, connectivity_mode_shape_dofs, MODESCALEFCT, MODESTDFCT, \
+                         MODESTDFCT_ELLIPSES, MODE_SHAPE_PAPER, RESULTS_PATH):
         if N_DIM == 2:
-            plot_modes_for_2d(self.modes_mean[-1], self.modes_std[-1], self.freq_mean[-1], nodes, \
-                              connectivity, MODESCALEFCT, MODESTDFCT, MODE2D_DIRECTION, RESULTS_PATH)
-        elif N_DIM == 3: # N_DIM == 3
-            plot_modes_for_3d()
+                if MODE_SHAPE_PAPER==None:
+                        plot_modes_for_2d(self.modes_mean[-1], self.modes_std[-1], self.freq_mean[-1], nodes, \
+                                                connectivity, connectivity_mode_shape_dofs, MODESCALEFCT, MODESTDFCT, MODE_SHAPE_PAPER, RESULTS_PATH)
+                else:
+                        plot_modes_for_2d_for_paper(self.modes_mean[-1], self.modes_std[-1], self.freq_mean[-1], nodes, \
+                                                        connectivity, connectivity_mode_shape_dofs, MODESCALEFCT, MODESTDFCT, MODE_SHAPE_PAPER, RESULTS_PATH)
+                 
+        elif N_DIM == 3:
+                if MODE_SHAPE_PAPER==None:
+                        plot_modes_for_3d(self.modes_mean[-1], self.modes_std[-1], self.freq_mean[-1], nodes, \
+                                                connectivity, connectivity_mode_shape_dofs, MODESCALEFCT, RESULTS_PATH)
+                else:
+                        plot_modes_for_3d_for_paper(self.modes_mean[-1], self.modes_std[-1], self.freq_mean[-1], nodes, \
+                                        connectivity, connectivity_mode_shape_dofs, MODESCALEFCT, MODESTDFCT, RESULTS_PATH)
         else:
             raise ValueError("Unrecognized Number of dimensions to plot mode shapes")
 

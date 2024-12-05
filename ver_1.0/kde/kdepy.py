@@ -68,11 +68,12 @@ class Kde():
                 if not sel_rows_df.size:
                     is_full=1
                     print(f'Cluster {ii:d} is empty with {self.KDEbwFactor:d} times of the bandwidth of {self.bw:.4f} Hz, try to increase the bandwith...\n')
+        print(f'All cluster are full with {self.KDEbwFactor:d} times of the bandwidth of {self.bw:.4f}')
         
 
-    def plot_select_modes_clusters(self, RESULTS_PATH):
+    def plot_select_modes_clusters(self, RESULTS_PATH, LEGEND_KWARGS_PLOTFREQCLUSTERS):
         # Plotting selected frequency clusters
-        plot_selected_frequency_clusters(self,RESULTS_PATH)
+        plot_selected_frequency_clusters(self,RESULTS_PATH, LEGEND_KWARGS_PLOTFREQCLUSTERS)
 
     
     def information_content(self, selectedpoles_totnum):
@@ -99,6 +100,7 @@ class Kde():
         plt.ylim(plt.gca().get_ylim()[0],plt.gca().get_ylim()[1]+0.20)
         plt.tight_layout()
         plt.savefig(RESULTS_PATH+f"/KDE.png", dpi=300)
+        plt.savefig(RESULTS_PATH+f"/KDE.pdf")
         plt.close()
 
     def export_results_to_file(self, RESULTS_PATH):

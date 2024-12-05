@@ -1,5 +1,7 @@
+# This is an example Python file with issues
 
-import matplotlib.pyplot as plt
+def say_hello():
+    print("Hello, World!")
 
-plt.rcParams.update({'font.size': 12})
-plt.rcParams['font.family'] = 'Poppins'
+if __name__ == "__main__":
+    say_hello()

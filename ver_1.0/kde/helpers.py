@@ -4,7 +4,7 @@ from matplotlib.ticker import FormatStrFormatter
 import numpy as np
 
 
-def plot_selected_frequency_clusters(self, RESULTS_PATH):
+def plot_selected_frequency_clusters(self, RESULTS_PATH, LEGEND_KWARGS_PLOTFREQCLUSTERS):
     fig1, ax1 = plt.subplots(figsize=(10,3),facecolor='white')
     for ii in range(len(self.Freqinter)):   # col 0 = 'Frequency'                 # col 1 = 'Order'
         ax1 = sns.scatterplot(x=self.Frequency_dataset[ii][:,0], y=self.Frequency_dataset[ii][:,1]*2, 
@@ -14,9 +14,10 @@ def plot_selected_frequency_clusters(self, RESULTS_PATH):
     ax1.set_ylim(bottom=0, top=max(self.Frequency_dataset[ii][:,1]*2)+10) # col 1 = 'Order'
     ax1.set_title('Extracted modes from KDE peaks $\pm$'+ f'{self.KDEbwFactor}'+ ' ' +'$bw_{ISJ}$')
     ax1.set_xlabel('Frequency [Hz]')
-    plt.legend(loc='lower right')
+    plt.legend(**LEGEND_KWARGS_PLOTFREQCLUSTERS)
     plt.tight_layout()
     plt.savefig(RESULTS_PATH + f"/KDE_frequency_clusters.png", dpi=300)
+    plt.savefig(RESULTS_PATH + f"/KDE_frequency_clusters.pdf")
     plt.close()
 
 def count_num_effective_poles_for_each_simulation(selectedpoles_totnum,Frequency_dataset):
@@ -44,6 +45,7 @@ def plot_IC_graph(IC, MAX_NUM_MC_SIM, ICTHRESH, RESULTS_PATH):
     plt.legend(loc='upper right')
     plt.tight_layout()
     plt.savefig(RESULTS_PATH + "/IC_sim.png", dpi=300)
+    plt.savefig(RESULTS_PATH + "/IC_sim.pdf")
     plt.close()
 
 

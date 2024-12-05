@@ -24,6 +24,9 @@ def import_data(DATA_FILE: str):
     elif file_extension == '.csv':
         data = pd.read_csv(DATA_FILE, header=None, index_col=False) 
         data = data.to_numpy()
+    elif file_extension == '.xlsx' or file_extension == '.xls':
+        data = pd.read_excel(DATA_FILE, header=None, index_col=False) 
+        data = data.to_numpy()
     elif file_extension == '.pkl':
         with open(DATA_FILE, 'rb') as f:
             data = pickle.load(f)
@@ -31,18 +34,21 @@ def import_data(DATA_FILE: str):
         raise ValueError(f"File extension not recognized: {file_extension} : Supported file format .txt, .csv, .pkl")
     return data
 
-def visualize_plot_signals(data, PLOTSIGNALS, RESULTS_PATH, SAMPLING_FREQUENCY, SAVEPLOTSIGNALS, labelsformat):
+def visualize_plot_signals(data, PLOTSIGNALS, RESULTS_PATH, SAMPLING_FREQUENCY, SAVEPLOTSIGNALS, labelsformat, LEGEND_KWARGS_PLOTSIGNALS={}):
     fs=SAMPLING_FREQUENCY
     time_units, vibration_units=labelsformat[0],labelsformat[1]
     if PLOTSIGNALS:
         plt.figure(facecolor='white')
         for ii in range(data.shape[1]):
             plt.plot(np.arange(start=0,stop=data.shape[0]/fs,step=1/fs),data[:,ii],label=f'channel {ii+1}')
-        plt.legend(loc='best');plt.xlabel(time_units);plt.ylabel(vibration_units)
+        plt.legend(**LEGEND_KWARGS_PLOTSIGNALS);plt.xlabel(time_units);plt.ylabel(vibration_units)
         plt.title('Monitored signals')
         plt.tight_layout()
         if SAVEPLOTSIGNALS:
             plt.savefig(RESULTS_PATH+f'/Monitored_Signals.png', format='png')
+            # plt.savefig(RESULTS_PATH+f'/Monitored_Signals.svg', format = 'svg', dpi=300)
+            # plt.savefig(RESULTS_PATH+f'/Monitored_Signals.pdf', bbox_inches='tight')
+            plt.savefig(RESULTS_PATH+f'/Monitored_Signals.pdf')
         # plt.show()
         plt.close()
 
@@ -111,7 +117,7 @@ def FDDsvp(data, fs, df=0.01, pov=0.5, window='hann'):
     fig, ax = plt.subplots(facecolor='white')
     for _i in range(nch):
     #    ax.semilogy(_f, S_val[_i, _i]) # scala log
-        ax.plot(_f[:], 10*np.log10(S_val[_i, _i])) # decibel
+        ax.plot(_f[:], 10*np.log10(S_val[_i, _i]), label=f'Channel {_i}') # decibel
     ax.grid()
     ax.set_xlim(left=0, right=freq_max)
     ax.xaxis.set_major_locator(MultipleLocator(freq_max/10))
@@ -133,12 +139,15 @@ def FDDsvp(data, fs, df=0.01, pov=0.5, window='hann'):
     
     return fig, Results
 
-def visualize_plot_PSD(data, PLOTSVDOFPSD, RESULTS_PATH, SAMPLING_FREQUENCY, SAVEPLOTSVDOFPSD):
+def visualize_plot_PSD(data, PLOTSVDOFPSD, RESULTS_PATH, SAMPLING_FREQUENCY, SAVEPLOTSVDOFPSD, LEGEND_KWARGS_PLOTSVD={}):
     fs=SAMPLING_FREQUENCY
     if PLOTSVDOFPSD:
         FDD = FDDsvp(data,  fs)
+        plt.legend(**LEGEND_KWARGS_PLOTSVD)
         if SAVEPLOTSVDOFPSD:
             plt.savefig(RESULTS_PATH+f'/SVD_of_PSD.png', format='png')
+            # plt.savefig(RESULTS_PATH+f'/SVD_of_PSD.svg', format = 'svg', dpi=300)
+            plt.savefig(RESULTS_PATH+f'/SVD_of_PSD.pdf')
         # plt.show()
         plt.close()
     return FDD

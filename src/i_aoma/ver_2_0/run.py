@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 import matplotlib
 
-from i_aoma.ver_2_0.IAOMASingleSetup import IAOMASingleSetup
+from i_aoma.ver_2_0.IAOMA import IAOMA
 
 
 matplotlib.get_backend()
@@ -58,9 +58,19 @@ for ii in range(data.shape[1]):
 
 
 # create instance of iAOMA setup
-Timber_ss = IAOMASingleSetup(
-    data, fs=fs, NsimPh1=200, ff=FreQ[0], DecFct=2, detrend=False
+Timber_ss = IAOMA(
+    data,
+    fs=fs,
+    ff=FreQ[0],
+    DecFct=0,
+    detrend=True,
 )
+# freely modify the default limits
+Timber_ss.ordmax = 200
+
+Timber_ss.print_qmc_sampling_limits()
+
+Timber_ss.run_phase1(NsimPh1=10, n_jobs=3, timeout_seconds=30)
 
 # _geo1 = data_path + os.sep + "Geo1_timber.xlsx"
 # _geo2 = data_path + os.sep + "Geo2_timber.xlsx"

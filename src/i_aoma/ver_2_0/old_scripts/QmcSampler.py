@@ -24,6 +24,11 @@ class QmcSampler:
         self.lmin = np.rint(2 / self.ff).astype(int)  # 3*TSmax #int(np.ceil(2/ff))
         self.lmax = self.Ndata
 
+    def print_qmc_limits(self):
+        print(
+            f"Sampling limits: TSmin={self.TSmin}, TSmax={self.TSmax}, nmin={self.nmin}, nmax={self.nmax}, lmin={self.lmin}, lmax={self.lmax}"
+        )
+
     def Halton(self, _dim=4, _scamble=True, _numsim=1):
         HaltonSamples = qmc.Halton(d=_dim, scramble=_scamble).random(n=_numsim)
         TS = self.TSmin + np.rint(

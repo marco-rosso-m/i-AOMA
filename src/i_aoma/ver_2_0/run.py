@@ -11,22 +11,24 @@ import pandas as pd
 import os
 import matplotlib.pyplot as plt
 
-# matplotlib.get_backend()
-# matplotlib.use('tkagg')
-# import mplcursors
-# from pyoma2.functions.plot import plot_mac_matrix
-
+import matplotlib
 
 from i_aoma.ver_2_0.IAOMASingleSetup import IAOMASingleSetup
 
+
+matplotlib.get_backend()
+matplotlib.use("tkagg")
+# import mplcursors
+
+
 plt.plot([0, 0])
-plt.show()
+# plt.show()
 plt.close()
 
 data_path = "src/i_aoma/ver_2_0/test_data"
 data_filename = "TRAVE1(AF, 1cuscino)_Job1_2020_05_28_07_16_09_001_001"
 data_filename_ext = ".xlsx"
-# FreQ = [7.10, 8.69, 14.09]
+FreQ = [65.98]
 # Orders = [5,9,6]
 output_path = "src/i_aoma/ver_2_0/Results/trave1_results_1cuscino"
 
@@ -56,13 +58,15 @@ for ii in range(data.shape[1]):
 
 
 # create instance of iAOMA setup
-Timber_ss = IAOMASingleSetup(data, fs=fs)
+Timber_ss = IAOMASingleSetup(
+    data, fs=fs, NsimPh1=200, ff=FreQ[0], DecFct=2, detrend=False
+)
 
-_geo1 = data_path + os.sep + "Geo1_timber.xlsx"
-_geo2 = data_path + os.sep + "Geo2_timber.xlsx"
+# _geo1 = data_path + os.sep + "Geo1_timber.xlsx"
+# _geo2 = data_path + os.sep + "Geo2_timber.xlsx"
 
-Timber_ss.def_geo(_geo1, _geo2)
+# Timber_ss.def_geo(_geo1, _geo2)
 
-fig, ax = Timber_ss.ss.plot_geo1()
+# fig, ax = Timber_ss.ss.plot_geo1()
 
 print("ok")

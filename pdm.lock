@@ -2,10 +2,10 @@
 # It is not intended for manual editing.
 
 [metadata]
-groups = ["default"]
+groups = ["default", "dev"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:f49faa1260dcbfd2ead6b94a8605120eecd9c6bf49f9c6fcfde052fe08b7e1c7"
+content_hash = "sha256:234a785233fd2e5c6fe1f8aa153ab67e71a2deed1e4c2c0ec081f3923ea9dba8"
 
 [[metadata.targets]]
 requires_python = ">=3.9,<3.13"
@@ -30,7 +30,7 @@ name = "asttokens"
 version = "3.0.0"
 requires_python = ">=3.8"
 summary = "Annotate AST trees with source code positions"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "asttokens-3.0.0-py3-none-any.whl", hash = "sha256:e3078351a059199dd5138cb1c706e6430c05eff2ff136af5eb4790f9d28932e2"},
@@ -42,7 +42,7 @@ name = "cfgv"
 version = "3.4.0"
 requires_python = ">=3.8"
 summary = "Validate configuration and produce human readable error messages."
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "cfgv-3.4.0-py2.py3-none-any.whl", hash = "sha256:b7265b1f29fd3316bfcd2b330d63d024f2bfd8bcb8b0272f8e19a504856c48f9"},
@@ -54,7 +54,7 @@ name = "colorama"
 version = "0.4.6"
 requires_python = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7"
 summary = "Cross-platform colored terminal text."
-groups = ["default"]
+groups = ["default", "dev"]
 marker = "sys_platform == \"win32\" and python_version < \"3.13\" and python_version >= \"3.9\" or platform_system == \"Windows\" and python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"},
@@ -66,7 +66,7 @@ name = "comm"
 version = "0.2.2"
 requires_python = ">=3.8"
 summary = "Jupyter Python Comm implementation, for usage in ipykernel, xeus-python etc."
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 dependencies = [
     "traitlets>=4",
@@ -81,7 +81,7 @@ name = "contourpy"
 version = "1.3.0"
 requires_python = ">=3.9"
 summary = "Python library for calculating contours of 2D quadrilateral grids"
-groups = ["default"]
+groups = ["default", "dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 dependencies = [
     "numpy>=1.23",
@@ -141,7 +141,7 @@ name = "cycler"
 version = "0.12.1"
 requires_python = ">=3.8"
 summary = "Composable style cycles"
-groups = ["default"]
+groups = ["default", "dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "cycler-0.12.1-py3-none-any.whl", hash = "sha256:85cef7cff222d8644161529808465972e51340599459b8ac3ccbac5a854e0d30"},
@@ -153,7 +153,7 @@ name = "decorator"
 version = "5.1.1"
 requires_python = ">=3.5"
 summary = "Decorators for Humans"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "decorator-5.1.1-py3-none-any.whl", hash = "sha256:b8c3f85900b9dc423225913c5aace94729fe1fa9763b38939a95226f02d37186"},
@@ -164,7 +164,7 @@ files = [
 name = "distlib"
 version = "0.3.9"
 summary = "Distribution utilities"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "distlib-0.3.9-py2.py3-none-any.whl", hash = "sha256:47f8c22fd27c27e25a65601af709b38e4f0a45ea4fc2e710f65755fa8caaaf87"},
@@ -176,7 +176,7 @@ name = "et-xmlfile"
 version = "2.0.0"
 requires_python = ">=3.8"
 summary = "An implementation of lxml.xmlfile for the standard library"
-groups = ["default"]
+groups = ["default", "dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "et_xmlfile-2.0.0-py3-none-any.whl", hash = "sha256:7a91720bc756843502c3b7504c77b8fe44217c85c537d85037f0f536151b2caa"},
@@ -188,7 +188,7 @@ name = "exceptiongroup"
 version = "1.2.2"
 requires_python = ">=3.7"
 summary = "Backport of PEP 654 (exception groups)"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.11\" and python_version >= \"3.9\""
 files = [
     {file = "exceptiongroup-1.2.2-py3-none-any.whl", hash = "sha256:3111b9d131c238bec2f8f516e123e14ba243563fb135d3fe885990585aa7795b"},
@@ -200,7 +200,7 @@ name = "executing"
 version = "2.1.0"
 requires_python = ">=3.8"
 summary = "Get the currently executing AST node of a frame, and other information"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "executing-2.1.0-py2.py3-none-any.whl", hash = "sha256:8d63781349375b5ebccc3142f4b30350c0cd9c79f921cde38be2be4637e98eaf"},
@@ -212,7 +212,7 @@ name = "filelock"
 version = "3.16.1"
 requires_python = ">=3.8"
 summary = "A platform independent file lock."
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "filelock-3.16.1-py3-none-any.whl", hash = "sha256:2082e5703d51fbf98ea75855d9d5527e33d8ff23099bec374a134febee6946b0"},
@@ -224,7 +224,7 @@ name = "fonttools"
 version = "4.55.2"
 requires_python = ">=3.8"
 summary = "Tools to manipulate font files"
-groups = ["default"]
+groups = ["default", "dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "fonttools-4.55.2-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:bef0f8603834643b1a6419d57902f18e7d950ec1a998fb70410635c598dc1a1e"},
@@ -268,7 +268,7 @@ name = "identify"
 version = "2.6.3"
 requires_python = ">=3.9"
 summary = "File identification library for Python"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "identify-2.6.3-py2.py3-none-any.whl", hash = "sha256:9edba65473324c2ea9684b1f944fe3191db3345e50b6d04571d10ed164f8d7bd"},
@@ -280,7 +280,7 @@ name = "importlib-resources"
 version = "6.4.5"
 requires_python = ">=3.8"
 summary = "Read resources from Python packages"
-groups = ["default"]
+groups = ["default", "dev"]
 marker = "python_version < \"3.10\" and python_version >= \"3.9\""
 dependencies = [
     "zipp>=3.1.0; python_version < \"3.10\"",
@@ -292,13 +292,12 @@ files = [
 
 [[package]]
 name = "ipympl"
-version = "0.9.4"
+version = "0.9.5"
 requires_python = ">=3.9"
 summary = "Matplotlib Jupyter Extension"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 dependencies = [
-    "ipython-genutils",
     "ipython<9",
     "ipywidgets<9,>=7.6.0",
     "matplotlib<4,>=3.4.0",
@@ -307,8 +306,8 @@ dependencies = [
     "traitlets<6",
 ]
 files = [
-    {file = "ipympl-0.9.4-py3-none-any.whl", hash = "sha256:5b0c08c6f4f6ea655ba58239363457c10fb921557f5038c1a46db4457d6d6b0e"},
-    {file = "ipympl-0.9.4.tar.gz", hash = "sha256:cfb53c5b4fcbcee6d18f095eecfc6c6c474303d5b744e72cc66e7a2804708907"},
+    {file = "ipympl-0.9.5-py3-none-any.whl", hash = "sha256:ff14a357f43552ec92582eb8b2f76b844b469aa2fa76833f15ead7fa584c19fc"},
+    {file = "ipympl-0.9.5.tar.gz", hash = "sha256:b702db4bd1138cee21ab3c731e1c1bc5c3efbfa81b9b42a1820f79122d946dc8"},
 ]
 
 [[package]]
@@ -316,7 +315,7 @@ name = "ipython"
 version = "8.18.1"
 requires_python = ">=3.9"
 summary = "IPython: Productive Interactive Computing"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 dependencies = [
     "colorama; sys_platform == \"win32\"",
@@ -337,22 +336,11 @@ files = [
 ]
 
 [[package]]
-name = "ipython-genutils"
-version = "0.2.0"
-summary = "Vestigial utilities from IPython"
-groups = ["default"]
-marker = "python_version < \"3.13\" and python_version >= \"3.9\""
-files = [
-    {file = "ipython_genutils-0.2.0-py2.py3-none-any.whl", hash = "sha256:72dd37233799e619666c9f639a9da83c34013a73e8bbc79a7a6348d93c61fab8"},
-    {file = "ipython_genutils-0.2.0.tar.gz", hash = "sha256:eb2e116e75ecef9d4d228fdc66af54269afa26ab4463042e33785b887c628ba8"},
-]
-
-[[package]]
 name = "ipywidgets"
 version = "8.1.5"
 requires_python = ">=3.7"
 summary = "Jupyter interactive widgets"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 dependencies = [
     "comm>=0.1.3",
@@ -371,7 +359,7 @@ name = "jedi"
 version = "0.19.2"
 requires_python = ">=3.6"
 summary = "An autocompletion tool for Python that can be used for text editors."
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 dependencies = [
     "parso<0.9.0,>=0.8.4",
@@ -398,7 +386,7 @@ name = "jupyterlab-widgets"
 version = "3.0.13"
 requires_python = ">=3.7"
 summary = "Jupyter interactive widgets for JupyterLab"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "jupyterlab_widgets-3.0.13-py3-none-any.whl", hash = "sha256:e3cda2c233ce144192f1e29914ad522b2f4c40e77214b0cc97377ca3d323db54"},
@@ -444,7 +432,7 @@ name = "kiwisolver"
 version = "1.4.7"
 requires_python = ">=3.8"
 summary = "A fast implementation of the Cassowary constraint solver"
-groups = ["default"]
+groups = ["default", "dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "kiwisolver-1.4.7-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:8a9c83f75223d5e48b0bc9cb1bf2776cf01563e00ade8775ffe13b0b6e1af3a6"},
@@ -531,7 +519,7 @@ name = "matplotlib"
 version = "3.8.3"
 requires_python = ">=3.9"
 summary = "Python plotting package"
-groups = ["default"]
+groups = ["default", "dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 dependencies = [
     "contourpy>=1.0.1",
@@ -581,7 +569,7 @@ name = "matplotlib-inline"
 version = "0.1.7"
 requires_python = ">=3.8"
 summary = "Inline Matplotlib backend for Jupyter"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 dependencies = [
     "traitlets",
@@ -592,11 +580,27 @@ files = [
 ]
 
 [[package]]
+name = "mplcursors"
+version = "0.6"
+requires_python = ">=3.7"
+summary = "Interactive data selection cursors for Matplotlib."
+groups = ["dev"]
+marker = "python_version < \"3.13\" and python_version >= \"3.9\""
+dependencies = [
+    "importlib-metadata; python_version < \"3.8\"",
+    "matplotlib!=3.7.1,>=3.1",
+]
+files = [
+    {file = "mplcursors-0.6-py3-none-any.whl", hash = "sha256:2d900267848378987c46ad2504ea484e274adbb596a71547c5c95d2b4f520a56"},
+    {file = "mplcursors-0.6.tar.gz", hash = "sha256:775217cd09965bb17179c0cd0fb123fed4f4f00d7ade7e7e8788a6581fb2c8a9"},
+]
+
+[[package]]
 name = "nodeenv"
 version = "1.9.1"
 requires_python = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7"
 summary = "Node.js virtual environment builder"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "nodeenv-1.9.1-py2.py3-none-any.whl", hash = "sha256:ba11c9782d29c27c70ffbdda2d7415098754709be8a7056d79a737cd901155c9"},
@@ -608,7 +612,7 @@ name = "numpy"
 version = "1.26.4"
 requires_python = ">=3.9"
 summary = "Fundamental package for array computing in Python"
-groups = ["default"]
+groups = ["default", "dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "numpy-1.26.4-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:9ff0f4f29c51e2803569d7a51c2304de5554655a60c5d776e35b4a41413830d0"},
@@ -654,7 +658,7 @@ name = "openpyxl"
 version = "3.1.5"
 requires_python = ">=3.8"
 summary = "A Python library to read/write Excel 2010 xlsx/xlsm files"
-groups = ["default"]
+groups = ["default", "dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 dependencies = [
     "et-xmlfile",
@@ -669,7 +673,7 @@ name = "packaging"
 version = "24.2"
 requires_python = ">=3.8"
 summary = "Core utilities for Python packages"
-groups = ["default"]
+groups = ["default", "dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "packaging-24.2-py3-none-any.whl", hash = "sha256:09abb1bccd265c01f4a3aa3f7a7db064b36514d2cba19a2f694fe6150451a759"},
@@ -741,7 +745,7 @@ name = "parso"
 version = "0.8.4"
 requires_python = ">=3.6"
 summary = "A Python Parser"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "parso-0.8.4-py2.py3-none-any.whl", hash = "sha256:a418670a20291dacd2dddc80c377c5c3791378ee1e8d12bffc35420643d43f18"},
@@ -752,7 +756,7 @@ files = [
 name = "pexpect"
 version = "4.9.0"
 summary = "Pexpect allows easy control of interactive console applications."
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\" and sys_platform != \"win32\""
 dependencies = [
     "ptyprocess>=0.5",
@@ -767,7 +771,7 @@ name = "pillow"
 version = "11.0.0"
 requires_python = ">=3.9"
 summary = "Python Imaging Library (Fork)"
-groups = ["default"]
+groups = ["default", "dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "pillow-11.0.0-cp310-cp310-macosx_10_10_x86_64.whl", hash = "sha256:6619654954dc4936fcff82db8eb6401d3159ec6be81e33c6000dfd76ae189947"},
@@ -833,7 +837,7 @@ name = "platformdirs"
 version = "4.3.6"
 requires_python = ">=3.8"
 summary = "A small Python package for determining appropriate platform-specific dirs, e.g. a `user data dir`."
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "platformdirs-4.3.6-py3-none-any.whl", hash = "sha256:73e575e1408ab8103900836b97580d5307456908a03e92031bab39e4554cc3fb"},
@@ -845,7 +849,7 @@ name = "pre-commit"
 version = "4.0.1"
 requires_python = ">=3.9"
 summary = "A framework for managing and maintaining multi-language pre-commit hooks."
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 dependencies = [
     "cfgv>=2.0.0",
@@ -864,7 +868,7 @@ name = "prompt-toolkit"
 version = "3.0.48"
 requires_python = ">=3.7.0"
 summary = "Library for building powerful interactive command lines in Python"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 dependencies = [
     "wcwidth",
@@ -878,7 +882,7 @@ files = [
 name = "ptyprocess"
 version = "0.7.0"
 summary = "Run a subprocess in a pseudo terminal"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\" and sys_platform != \"win32\""
 files = [
     {file = "ptyprocess-0.7.0-py2.py3-none-any.whl", hash = "sha256:4b41f3967fce3af57cc7e94b888626c18bf37a083e3651ca8feeb66d492fef35"},
@@ -889,7 +893,7 @@ files = [
 name = "pure-eval"
 version = "0.2.3"
 summary = "Safely evaluate AST nodes without side effects"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "pure_eval-0.2.3-py3-none-any.whl", hash = "sha256:1db8e35b67b3d218d818ae653e27f06c3aa420901fa7b081ca98cbedc874e0d0"},
@@ -901,7 +905,7 @@ name = "pyarrow"
 version = "18.1.0"
 requires_python = ">=3.9"
 summary = "Python library for Apache Arrow"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "pyarrow-18.1.0-cp310-cp310-macosx_12_0_arm64.whl", hash = "sha256:e21488d5cfd3d8b500b3238a6c4b075efabc18f0f6d80b29239737ebd69caa6c"},
@@ -1043,7 +1047,7 @@ name = "pygments"
 version = "2.18.0"
 requires_python = ">=3.8"
 summary = "Pygments is a syntax highlighting package written in Python."
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "pygments-2.18.0-py3-none-any.whl", hash = "sha256:b8e6aca0523f3ab76fee51799c488e38782ac06eafcf95e7ba832985c8e7b13a"},
@@ -1074,7 +1078,7 @@ name = "pyparsing"
 version = "3.2.0"
 requires_python = ">=3.9"
 summary = "pyparsing module - Classes and methods to define and execute parsing grammars"
-groups = ["default"]
+groups = ["default", "dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "pyparsing-3.2.0-py3-none-any.whl", hash = "sha256:93d9577b88da0bbea8cc8334ee8b918ed014968fd2ec383e868fb8afb1ccef84"},
@@ -1145,7 +1149,7 @@ name = "python-dateutil"
 version = "2.9.0.post0"
 requires_python = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
 summary = "Extensions to the standard Python datetime module"
-groups = ["default"]
+groups = ["default", "dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 dependencies = [
     "six>=1.5",
@@ -1171,7 +1175,7 @@ name = "pyyaml"
 version = "6.0.2"
 requires_python = ">=3.8"
 summary = "YAML parser and emitter for Python"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "PyYAML-6.0.2-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:0a9a2848a5b7feac301353437eb7d5957887edbf81d56e903999a75a3d743086"},
@@ -1310,7 +1314,7 @@ name = "six"
 version = "1.17.0"
 requires_python = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
 summary = "Python 2 and 3 compatibility utilities"
-groups = ["default"]
+groups = ["default", "dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "six-1.17.0-py2.py3-none-any.whl", hash = "sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274"},
@@ -1321,7 +1325,7 @@ files = [
 name = "stack-data"
 version = "0.6.3"
 summary = "Extract data from python stack frames and tracebacks for informative displays"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 dependencies = [
     "asttokens>=2.1.0",
@@ -1365,7 +1369,7 @@ name = "traitlets"
 version = "5.14.3"
 requires_python = ">=3.8"
 summary = "Traitlets Python configuration system"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "traitlets-5.14.3-py3-none-any.whl", hash = "sha256:b74e89e397b1ed28cc831db7aea759ba6640cb3de13090ca145426688ff1ac4f"},
@@ -1377,7 +1381,7 @@ name = "typing-extensions"
 version = "4.12.2"
 requires_python = ">=3.8"
 summary = "Backported and Experimental Type Hints for Python 3.8+"
-groups = ["default"]
+groups = ["default", "dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "typing_extensions-4.12.2-py3-none-any.whl", hash = "sha256:04e5ca0351e0f3f85c6853954072df659d0d13fac324d0072316b67d7794700d"},
@@ -1401,7 +1405,7 @@ name = "virtualenv"
 version = "20.28.0"
 requires_python = ">=3.8"
 summary = "Virtual Python Environment builder"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 dependencies = [
     "distlib<1,>=0.3.7",
@@ -1418,7 +1422,7 @@ files = [
 name = "wcwidth"
 version = "0.2.13"
 summary = "Measures the displayed width of unicode strings in a terminal"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 dependencies = [
     "backports-functools-lru-cache>=1.2.1; python_version < \"3.2\"",
@@ -1433,7 +1437,7 @@ name = "widgetsnbextension"
 version = "4.0.13"
 requires_python = ">=3.7"
 summary = "Jupyter interactive widgets for Jupyter Notebook"
-groups = ["default"]
+groups = ["dev"]
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "widgetsnbextension-4.0.13-py3-none-any.whl", hash = "sha256:74b2692e8500525cc38c2b877236ba51d34541e6385eeed5aec15a70f88a6c71"},
@@ -1445,7 +1449,7 @@ name = "zipp"
 version = "3.21.0"
 requires_python = ">=3.9"
 summary = "Backport of pathlib-compatible object wrapper for zip files"
-groups = ["default"]
+groups = ["default", "dev"]
 marker = "python_version < \"3.10\" and python_version >= \"3.9\""
 files = [
     {file = "zipp-3.21.0-py3-none-any.whl", hash = "sha256:ac1bbe05fd2991f160ebce24ffbac5f6d11d83dc90891255885223d42b3cd931"},

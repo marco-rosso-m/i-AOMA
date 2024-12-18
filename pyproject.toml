@@ -5,7 +5,7 @@ description = "intelligent Automatic Operational Modal Analysis"
 authors = [
     {name = "Marco Martino Rosso", email = "marco.rosso@polito.it"},
 ]
-dependencies = ["numpy==1.26.4", "pandas==2.2.3", "scipy>=1.13.1", "pyOMA-2 @ git+https://github.com/dagghe/pyOMA2.git", "KDEpy>=1.1.11", "seaborn>=0.13.2", "scikit-learn>=1.5.2", "openpyxl>=3.1.5", "pyarrow>=18.1.0", "pydantic>=2.10.3", "ipympl>=0.9.4", "pyqt5>=5.15.11", "ipython>=8.18.1", "matplotlib==3.8.3", "pre-commit>=4.0.1"]
+dependencies = ["numpy==1.26.4", "pandas==2.2.3", "scipy>=1.13.1", "pyOMA-2 @ git+https://github.com/dagghe/pyOMA2.git", "KDEpy>=1.1.11", "seaborn>=0.13.2", "scikit-learn>=1.5.2", "pydantic>=2.10.3", "pyqt5>=5.15.11", "matplotlib==3.8.3", "openpyxl>=3.1.5", "joblib>=1.4.2"]
 requires-python = ">=3.8, <3.13"
 readme = "README.md"
 license = {text = "GPL"}
@@ -17,3 +17,13 @@ build-backend = "pdm.backend"
 
 [tool.pdm]
 distribution = true
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.0.1",
+    "openpyxl>=3.1.5",
+    "pyarrow>=18.1.0",
+    "ipython>=8.18.1",
+    "ipympl>=0.9.5",
+    "mplcursors>=0.6",
+]

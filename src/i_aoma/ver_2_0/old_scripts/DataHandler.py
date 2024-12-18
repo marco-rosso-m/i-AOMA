@@ -4,10 +4,10 @@ from typing import List
 from pyoma2.setup import SingleSetup
 from pyoma2.algorithms import SSIcov
 from pyoma2.algorithms.data.result import SSIResult
-from .helper_DataHandler import timeout
+from .helper import timeout
 
 
-class SingleSetupHandler:
+class SSHandler:
     def __init__(
         self,
         data: np.ndarray,

@@ -5,11 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-<<<<<<< HEAD
 content_hash = "sha256:234a785233fd2e5c6fe1f8aa153ab67e71a2deed1e4c2c0ec081f3923ea9dba8"
-=======
-content_hash = "sha256:704e74295e67d3f090c5992a27e0d19c5d1a1aa8da3b5a94d133d16e8e47e3af"
->>>>>>> fe2c1c824951b2e04bf75fe2f0a5123880135250
 
 [[metadata.targets]]
 requires_python = ">=3.9,<3.13"
@@ -46,11 +42,7 @@ name = "cfgv"
 version = "3.4.0"
 requires_python = ">=3.8"
 summary = "Validate configuration and produce human readable error messages."
-<<<<<<< HEAD
 groups = ["dev"]
-=======
-groups = ["default", "dev"]
->>>>>>> fe2c1c824951b2e04bf75fe2f0a5123880135250
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "cfgv-3.4.0-py2.py3-none-any.whl", hash = "sha256:b7265b1f29fd3316bfcd2b330d63d024f2bfd8bcb8b0272f8e19a504856c48f9"},
@@ -281,11 +273,7 @@ files = [
 name = "distlib"
 version = "0.3.9"
 summary = "Distribution utilities"
-<<<<<<< HEAD
 groups = ["dev"]
-=======
-groups = ["default", "dev"]
->>>>>>> fe2c1c824951b2e04bf75fe2f0a5123880135250
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "distlib-0.3.9-py2.py3-none-any.whl", hash = "sha256:47f8c22fd27c27e25a65601af709b38e4f0a45ea4fc2e710f65755fa8caaaf87"},
@@ -309,11 +297,7 @@ name = "exceptiongroup"
 version = "1.2.2"
 requires_python = ">=3.7"
 summary = "Backport of PEP 654 (exception groups)"
-<<<<<<< HEAD
 groups = ["dev"]
-=======
-groups = ["default", "dev"]
->>>>>>> fe2c1c824951b2e04bf75fe2f0a5123880135250
 marker = "python_version < \"3.11\" and python_version >= \"3.9\""
 files = [
     {file = "exceptiongroup-1.2.2-py3-none-any.whl", hash = "sha256:3111b9d131c238bec2f8f516e123e14ba243563fb135d3fe885990585aa7795b"},
@@ -337,11 +321,7 @@ name = "filelock"
 version = "3.16.1"
 requires_python = ">=3.8"
 summary = "A platform independent file lock."
-<<<<<<< HEAD
 groups = ["dev"]
-=======
-groups = ["default", "dev"]
->>>>>>> fe2c1c824951b2e04bf75fe2f0a5123880135250
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "filelock-3.16.1-py3-none-any.whl", hash = "sha256:2082e5703d51fbf98ea75855d9d5527e33d8ff23099bec374a134febee6946b0"},
@@ -397,11 +377,7 @@ name = "identify"
 version = "2.6.3"
 requires_python = ">=3.9"
 summary = "File identification library for Python"
-<<<<<<< HEAD
 groups = ["dev"]
-=======
-groups = ["default", "dev"]
->>>>>>> fe2c1c824951b2e04bf75fe2f0a5123880135250
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "identify-2.6.3-py2.py3-none-any.whl", hash = "sha256:9edba65473324c2ea9684b1f944fe3191db3345e50b6d04571d10ed164f8d7bd"},
@@ -745,11 +721,7 @@ name = "nodeenv"
 version = "1.9.1"
 requires_python = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7"
 summary = "Node.js virtual environment builder"
-<<<<<<< HEAD
 groups = ["dev"]
-=======
-groups = ["default", "dev"]
->>>>>>> fe2c1c824951b2e04bf75fe2f0a5123880135250
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "nodeenv-1.9.1-py2.py3-none-any.whl", hash = "sha256:ba11c9782d29c27c70ffbdda2d7415098754709be8a7056d79a737cd901155c9"},
@@ -986,11 +958,7 @@ name = "platformdirs"
 version = "4.3.6"
 requires_python = ">=3.8"
 summary = "A small Python package for determining appropriate platform-specific dirs, e.g. a `user data dir`."
-<<<<<<< HEAD
 groups = ["dev"]
-=======
-groups = ["default", "dev"]
->>>>>>> fe2c1c824951b2e04bf75fe2f0a5123880135250
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "platformdirs-4.3.6-py3-none-any.whl", hash = "sha256:73e575e1408ab8103900836b97580d5307456908a03e92031bab39e4554cc3fb"},
@@ -1014,11 +982,7 @@ name = "pre-commit"
 version = "4.0.1"
 requires_python = ">=3.9"
 summary = "A framework for managing and maintaining multi-language pre-commit hooks."
-<<<<<<< HEAD
 groups = ["dev"]
-=======
-groups = ["default", "dev"]
->>>>>>> fe2c1c824951b2e04bf75fe2f0a5123880135250
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 dependencies = [
     "cfgv>=2.0.0",
@@ -1380,11 +1344,7 @@ name = "pyyaml"
 version = "6.0.2"
 requires_python = ">=3.8"
 summary = "YAML parser and emitter for Python"
-<<<<<<< HEAD
 groups = ["dev"]
-=======
-groups = ["default", "dev"]
->>>>>>> fe2c1c824951b2e04bf75fe2f0a5123880135250
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 files = [
     {file = "PyYAML-6.0.2-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:0a9a2848a5b7feac301353437eb7d5957887edbf81d56e903999a75a3d743086"},
@@ -1646,11 +1606,7 @@ name = "virtualenv"
 version = "20.28.0"
 requires_python = ">=3.8"
 summary = "Virtual Python Environment builder"
-<<<<<<< HEAD
 groups = ["dev"]
-=======
-groups = ["default", "dev"]
->>>>>>> fe2c1c824951b2e04bf75fe2f0a5123880135250
 marker = "python_version < \"3.13\" and python_version >= \"3.9\""
 dependencies = [
     "distlib<1,>=0.3.7",

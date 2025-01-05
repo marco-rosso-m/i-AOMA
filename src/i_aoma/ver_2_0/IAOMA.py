@@ -1,11 +1,26 @@
 import numpy as np
 import copy
+import logging
+import os
 
-from pyoma2.setup import SingleSetup
-from pyoma2.algorithms import SSIcov
+from .pyoma2.setup import SingleSetup
+from .pyoma2.algorithms import SSIcov
 
 from .IAOMAPhase1 import IAOMAPhase1
 from .IAOMAPhase2 import IAOMAPhase2
+
+# Erase the content of the log file if it exists
+log_file = "iaoma_run.log"
+if os.path.exists(log_file):
+    open(log_file, "w").close()
+
+# Set up logging
+logging.basicConfig(
+    filename="iaoma_run.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(message)s",
+    filemode="w+",
+)  # Use 'w' for overwrite mode, 'a' for append mode
 
 
 class IAOMA:
@@ -19,24 +34,34 @@ class IAOMA:
         data: np.ndarray,
         fs: float,
         ff: float = 1.0,
-        DecFct=0,
-        detrend=False,
+        DecFct: int = 0,
+        detrend: bool = False,
+        output_path: str = os.getcwd() + os.sep + "IAOMA_Results",
     ):
         # Initialize shared attributes
+        print("Initialize i-AOMA...")
+        logging.info("Initialize i-AOMA...")
+
+        # Create output folder if it does not exist
+        self.output_path = output_path
+        if not os.path.exists(output_path):
+            os.makedirs(output_path)
 
         self.SingleSetup = SingleSetup(data, fs=fs)
         if detrend:
             print("Detrending data...")
+            logging.info("Detrending data...")
             self.SingleSetup.detrend_data()
 
         if DecFct > 1:
             print("Decimating data...")
+            logging.info("Decimating data...")
             self.SingleSetup.decimate_data(q=DecFct)
 
         self.SingleSetup._initial_data = copy.deepcopy(self.SingleSetup.data)
         self.SingleSetup._initial_fs = self.SingleSetup.fs
 
-        ssicov = SSIcov(name="SSIcov", br=50, ordmax=50)
+        ssicov = SSIcov(name="SSIcov", br=50, ordmax=50, method="cov_R")
         # Add algorithms to the single setup class
         self.SingleSetup.add_algorithms(ssicov)
 
@@ -53,7 +78,7 @@ class IAOMA:
         self.brmax = 10 * self.brmin
 
         # order min and max (min was not used for the moment)
-        self.ordmin = 2 * self.NDOFS
+        self.ordmin = 0  # 2 * self.NDOFS
         self.ordmax = self.brmax * self.NDOFS
 
         # time window length
@@ -66,82 +91,57 @@ class IAOMA:
         )
 
     def run_phase1(
-        self, NsimPh1: int, n_jobs: int = -1, timeout_seconds: int = 30, set_seed=None
+        self,
+        NsimPh1: int = 1,
+        n_jobs: int = -1,
+        timeout_seconds: int = 30,
+        Nsim_batch: int = 1,
+        set_seed=None,
+        plt_resolution: dict = {"freq": 0.5, "damp": 0.001, "order": 1},
+        plt_stab_diag_backup: bool = False,
     ):
         """
         Creates an instance of IAOMAPhase1 and executes Phase 1 operations.
         """
         print("Starting Phase 1...")
-        phase1 = IAOMAPhase1(self)
-        phase1.loop_phase1_operations(NsimPh1, n_jobs, timeout_seconds, set_seed)
-        return phase1  # Return phase1 object for further use
+        logging.info("Starting Phase 1...")
+        self.phase1 = IAOMAPhase1(self)
+        fig, ax = self.phase1.loop_phase1_operations(
+            NsimPh1,
+            n_jobs,
+            timeout_seconds,
+            Nsim_batch,
+            set_seed,
+            plt_resolution,
+            plt_stab_diag_backup,
+        )
+        # return self.results  # Return phase1 object for further use
+        return fig, ax
+
+    def plot_phase1_overlapped_stab_diag(self, method: str = "density"):
+        """
+        Plot the results of Phase 1: overlapped stabilization diagram.
+        """
+        fig, ax = self.phase1.plot_overlap_stab_diag(method=method)
+        print("Plotting Phase 1 results: overlapped stabilization diagram...")
+        logging.info("Plotting Phase 1 results: overlapped stabilization diagram...")
+        return fig, ax
+
+    def plot_phase1_overlapped_cluster_diag(self, method: str = "density"):
+        """
+        Plot the results of Phase 1: overlapped damping cluster diagram.
+        """
+        fig, ax = self.phase1.plot_overlap_freq_damp_cluster(method=method)
+        print("Plotting Phase 1 results: overlapped damping cluster diagram...")
+        logging.info("Plotting Phase 1 results: overlapped damping cluster diagram...")
+        return fig, ax
 
     def run_phase2(self, phase1_object):
         """
         Creates an instance of IAOMAPhase2 using Phase 1 results.
         """
         print("Starting Phase 2...")
+        logging.info("Starting Phase 2...")
         phase2 = IAOMAPhase2(phase1_object)
         phase2.loop_phase2_operations()
         return phase2  # Return phase2 object for further use
-
-
-# class IAOMAPhase1:
-#     """
-#     Child class for Phase 1 operations.
-#     Inherits attributes from IAOMA but not its methods.
-#     """
-#     def __init__(self, iaoma):
-#         # Inherit attributes from IAOMA
-#         self.data = iaoma.data
-#         self.fs = iaoma.fs
-#         self.ff = iaoma.ff
-#         self.br = iaoma.br
-#         self.wlen = iaoma.wlen
-#         self.tt = iaoma.tt
-#         self.ordmax = iaoma.ordmax
-
-#     def loop_phase1_operations(self, NsimPh1, DecFct, detrend, n_jobs):
-#         """
-#         Loop operations until collecting NsimPh1 results.
-#         """
-#         print("Sampling parameters and running Phase 1 operations...")
-#         # Example of operations
-#         self.qmc_sample()
-#         self.detrend_and_decimate()
-#         self.SSICov()
-#         print("Phase 1 operations completed.")
-
-#     def qmc_sample(self):
-#         print("QMC Sampling...")
-
-#     def detrend_and_decimate(self):
-#         print("Detrending and Decimating...")
-
-#     def SSICov(self):
-#         print("SSICov analysis...")
-
-
-# class IAOMAPhase2(IAOMAPhase1):
-#     """
-#     Child class for Phase 2 operations.
-#     Inherits attributes from IAOMA and methods from IAOMAPhase1.
-#     Implements new functionality specific to Phase 2.
-#     """
-#     def __init__(self, phase1_object):
-#         # Inherit attributes from IAOMAPhase1 (and IAOMA indirectly)
-#         super().__init__(phase1_object)
-
-#     def loop_phase2_operations(self):
-#         """
-#         Loop operations until convergence.
-#         """
-#         print("Running Phase 2 operations with convergence checks...")
-#         self.qmc_sample()  # Reuse method from IAOMAPhase1
-#         self.detrend_and_decimate()
-#         self.SSICov()
-#         self.check_convergence()
-#         print("Phase 2 operations completed.")
-
-#     def check_convergence(self):
-#         print("Checking convergence of results...")

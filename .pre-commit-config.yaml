@@ -1,5 +1,5 @@
 default_stages: [pre-commit, pre-push]
-exclude: '^src/i_aoma/ver_1_0/.*'
+exclude: '^(src/i_aoma/ver_1_0/.*|src/i_aoma/ver_2_0/pyoma2/.*|src/i_aoma/ver_2_0_old/.*)'
 
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks

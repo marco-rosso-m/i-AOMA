@@ -276,3 +276,18 @@ def run_SSICov(
         plt.close()
 
     return SingleSetup.algorithms["SSIcov"].result
+
+
+def update_heatmap(new_x, new_y, heatmap, im, xedges, yedges):
+    # global heatmap
+    new_heatmap, _, _ = np.histogram2d(
+        new_x, new_y, bins=[xedges, yedges]
+    )  # np.histogram2d(new_x, new_y)#, \
+    # bins=[round(SingleSetup.fs/2/plt_resolution['freq']),int(new_x[1,:].max()/plt_resolution['order'])], \
+    # range = [[0, SingleSetup.fs/2], [new_x[1,:].min(), new_x[1,:].max()]])
+    new_heatmap = new_heatmap / np.max(new_heatmap)
+    heatmap += new_heatmap
+    heatmap = heatmap / np.max(heatmap)  # normalize the heatmap between 0 and 1
+    im.set_data(heatmap.T)
+    plt.draw()
+    return im, heatmap

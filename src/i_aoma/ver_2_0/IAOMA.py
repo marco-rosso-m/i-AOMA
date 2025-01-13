@@ -118,30 +118,102 @@ class IAOMA:
         # return self.results  # Return phase1 object for further use
         return fig, ax
 
-    def plot_phase1_overlapped_stab_diag(self, method: str = "density"):
-        """
-        Plot the results of Phase 1: overlapped stabilization diagram.
-        """
-        fig, ax = self.phase1.plot_overlap_stab_diag(method=method)
-        print("Plotting Phase 1 results: overlapped stabilization diagram...")
-        logging.info("Plotting Phase 1 results: overlapped stabilization diagram...")
-        return fig, ax
+    def dump_phase1_to_file(self, output_path: str = None):
+        # TODO: implement checks before saving or at least a try/except block
+        if output_path is not None:
+            self.phase1._dump_metadata_to_file_phase1(output_path)
+            self.phase1._dump_results_to_file_phase1(output_path)
+        elif hasattr(self.phase1, "output_path_phase1"):
+            self.phase1._dump_metadata_to_file_phase1(self.phase1.output_path_phase1)
+            self.phase1._dump_results_to_file_phase1(self.phase1.output_path_phase1)
+        else:
+            print("No results to save. Run Phase 1 first.")
+            logging.info("No results to save. Run Phase 1 first.")
+            return None
 
-    def plot_phase1_overlapped_cluster_diag(self, method: str = "density"):
+    def load_phase1_from_file(self, phase1_files: list):
         """
-        Plot the results of Phase 1: overlapped damping cluster diagram.
+        Load Phase 1 results from files.
         """
-        fig, ax = self.phase1.plot_overlap_freq_damp_cluster(method=method)
-        print("Plotting Phase 1 results: overlapped damping cluster diagram...")
-        logging.info("Plotting Phase 1 results: overlapped damping cluster diagram...")
-        return fig, ax
+        # TODO: implement checks on file before loading or at least a try/except block
+        print("Loading Phase 1 results...")
+        logging.info("Loading Phase 1 results...")
+        self.phase1 = IAOMAPhase1(self)
+        self.phase1._load_metadata_from_file_phase1(phase1_files[0])
+        self.phase1._load_results_from_file_phase1(phase1_files[1])
+
+    # def plot_phase1_overlapped_stab_diag(self, method: str = "density"):
+    #     """
+    #     Plot the results of Phase 1: overlapped stabilization diagram.
+    #     """
+    #     fig, ax = self.phase1.plot_overlap_stab_diag(method=method)
+
+    #     return fig, ax
+
+    # def plot_phase1_overlapped_cluster_diag(self, method: str = "density"):
+    #     """
+    #     Plot the results of Phase 1: overlapped damping cluster diagram.
+    #     """
+    #     fig, ax = self.phase1.plot_overlap_freq_damp_cluster(method=method)
+    #     print("Plotting Phase 1 results: overlapped damping cluster diagram...")
+    #     logging.info("Plotting Phase 1 results: overlapped damping cluster diagram...")
+    #     return fig, ax
+
+    def phase2_start(self):
+        if hasattr(self, "phase1"):  # if phase 1 already run
+            print("Starting Phase 2...")
+            logging.info("Starting Phase 2...")
+            self.phase2 = IAOMAPhase2()
+            self.phase2.check_convergence()
 
     def run_phase2(self, phase1_object):
         """
         Creates an instance of IAOMAPhase2 using Phase 1 results.
         """
-        print("Starting Phase 2...")
-        logging.info("Starting Phase 2...")
-        phase2 = IAOMAPhase2(phase1_object)
-        phase2.loop_phase2_operations()
-        return phase2  # Return phase2 object for further use
+        if hasattr(self, "phase1"):  # if phase 1 already run
+            print("Starting Phase 2...")
+            logging.info("Starting Phase 2...")
+            self.phase2 = IAOMAPhase2(phase1_object)
+            self.phase2.loop_phase2_operations()
+            # return phase2  # Return phase2 object for further use
+        else:
+            print("Phase 1 not run yet. Run Phase 1 first.")
+            logging.info("Phase 1 not run yet. Run Phase 1 first.")
+            return None
+
+    # def dump_results_to_file(self):
+    #     """
+    #     Save the results of Phase 1 and Phase 2 in a file.
+    #     """
+    #     if hasattr(self, 'phase2'):
+    #         # if phase 2 already run, then save both phase 1 and 2
+    #         with shelve.open(self.output_path+os.sep+'backup_shelve') as db:
+    #             db['phase1'] = self.phase1
+    #             db['phase2'] = self.phase2
+    #     elif hasattr(self, 'phase1'):
+    #         # if phase 1 already run, then save both phase 1 and 2
+    #         with shelve.open(self.output_path+os.sep+'backup_shelve') as db:
+    #             db['phase1'] = self.phase1
+    #     else:
+    #         print("No results to save. Run Phase 1 and Phase 2 first.")
+    #         logging.info("No results to save. Run Phase 1 and Phase 2 first.")
+    #         return None
+
+    # def dump_results_to_file_pickle(self):
+    #     """
+    #     Save the results of Phase 1 and Phase 2 in a file.
+    #     """
+    #     if hasattr(self, 'phase2'):
+    #         # if phase 2 already run, then save both phase 1 and 2
+    #         with open(self.output_path+os.sep+'backup_pickle_phase1.pkl.gz', 'wb') as backup_file:
+    #             pickle.dump(self.phase1, backup_file)
+    #         with shelve.open(self.output_path+os.sep+'backup_pickle_phase2', 'wb') as backup_file:
+    #             pickle.dump(self.phase2, backup_file)
+    #     elif hasattr(self, 'phase1'):
+    #         # if phase 1 already run, then save both phase 1 and 2
+    #         with open(self.output_path+os.sep+'backup_pickle_phase1.pkl.gz', 'wb') as backup_file:
+    #             pickle.dump(self.phase1, backup_file)
+    #     else:
+    #         print("No results to save. Run Phase 1 and Phase 2 first.")
+    #         logging.info("No results to save. Run Phase 1 and Phase 2 first.")
+    #         return None

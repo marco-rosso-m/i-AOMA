@@ -8,9 +8,9 @@ class IAOMAPhase2(IAOMAPhase1):
     Implements new functionality specific to Phase 2.
     """
 
-    def __init__(self, phase1_object):
+    def __init__(self):
         # Inherit attributes from IAOMAPhase1 (and IAOMA indirectly)
-        super().__init__(phase1_object)
+        super().__init__()
 
     def loop_phase2_operations(self):
         """
@@ -25,3 +25,4 @@ class IAOMAPhase2(IAOMAPhase1):
 
     def check_convergence(self):
         print("Checking convergence of results...")
+        super().plot_ic_graph()

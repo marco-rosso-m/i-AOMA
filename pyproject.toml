@@ -12,7 +12,8 @@ dependencies = [
     "seaborn>=0.13.2",
     "scikit-learn>=1.5.2",
     "pydantic>=2.10.3",
-    "pyqt5>=5.15.11",
+    "pyqt5>=5.15.11; sys_platform == 'linux'",
+    "pyqt5-qt5==5.15.2; sys_platform == 'win32'",
     "matplotlib==3.8.3",
     "openpyxl>=3.1.5",
     "joblib>=1.4.2",
@@ -38,6 +39,5 @@ dev = [
     "ipython>=8.18.1",
     "ipympl>=0.9.5",
     "mplcursors>=0.6",
-    "memray>=1.15.0",
     "memory-profiler>=0.61.0",
 ]

@@ -7,9 +7,9 @@ import pickle
 import glob
 
 from .helper_ssicov_timeout import run_SSICov_with_timeout, update_heatmap
-
 from .IAOMAPhase1 import IAOMAPhase1
 
+plt.ion()  # Enable interactive mode
 
 class IAOMAPhase2(IAOMAPhase1):
     """
@@ -52,12 +52,12 @@ class IAOMAPhase2(IAOMAPhase1):
         # TODO: salvare i risultati della fase 1 in un file nella cartella phase2 come {1000+NsimPhase1}.pkl e caricarli qui
         # TODO: salvare i discarded qmc samples in una cartella discarded_qmc_samples_phase2
 
-        self.dump_sim_results_to_file(self.Results.sim_results)
-        self.dump_discarded_qmc_samples_to_file(self.Results.discarded_qmc_samples)
+        # self.dump_sim_results_to_file(self.Results.sim_results)
+        # self.dump_discarded_qmc_samples_to_file(self.Results.discarded_qmc_samples)
 
     # DUMP RESULTS TO FILES
 
-    def dump_sim_results_to_file(self, sim_results):
+    def _dump_sim_results_to_file(self, sim_results):
         with open(
             self.output_path_phase_progr_results
             + os.sep
@@ -66,7 +66,7 @@ class IAOMAPhase2(IAOMAPhase1):
         ) as backup_file:
             pickle.dump(sim_results, backup_file)
 
-    def dump_discarded_qmc_samples_to_file(self, discarded_qmc_samples):
+    def _dump_discarded_qmc_samples_to_file(self, discarded_qmc_samples):
         for file in glob.glob(
             self.output_path_phase_progr_discarded_samples + os.sep + "*.pkl"
         ):
@@ -79,21 +79,21 @@ class IAOMAPhase2(IAOMAPhase1):
         ) as backup_file:
             pickle.dump(discarded_qmc_samples, backup_file)
 
-    def load_all_results_from_progressive_folders(self):
-        results_list = []
-        for file in glob.glob(self.output_path_phase_progr_results + os.sep + "*.pkl"):
-            with open(file, "rb") as backup_file:
-                results_list.extend(pickle.load(backup_file))
+    # def load_all_results_from_progressive_folders(self):
+    #     results_list = []
+    #     for file in glob.glob(self.output_path_phase_progr_results + os.sep + "*.pkl"):
+    #         with open(file, "rb") as backup_file:
+    #             results_list.extend(pickle.load(backup_file))
 
-        with open(
-            self.output_path_phase_progr_discarded_samples
-            + os.sep
-            + "discarded_qmc_samples.pkl",
-            "rb",
-        ) as backup_file:
-            discarded_qmc_samples = pickle.load(backup_file)
+    #     with open(
+    #         self.output_path_phase_progr_discarded_samples
+    #         + os.sep
+    #         + "discarded_qmc_samples.pkl",
+    #         "rb",
+    #     ) as backup_file:
+    #         discarded_qmc_samples = pickle.load(backup_file)
 
-        return results_list, discarded_qmc_samples
+    #     return results_list, discarded_qmc_samples
 
     # LOOP PHASE 2
 
@@ -120,11 +120,11 @@ class IAOMAPhase2(IAOMAPhase1):
 
         # Sequential loop
         if n_jobs == 0:
-            print("Running IAOMA-Phase 1 (sequential mode)...")
+            print("Running IAOMA-Phase 2 (sequential mode)...")
             logging.info(
                 "====================================================================================================="
             )
-            logging.info("Running IAOMA-Phase 1 (sequential mode)...")
+            logging.info("Running IAOMA-Phase 2 (sequential mode)...")
 
             batch_checkpoints = list(
                 range(self.Nsim_batch - 1, self.NsimPh_max + 1, self.Nsim_batch)
@@ -201,11 +201,11 @@ class IAOMAPhase2(IAOMAPhase1):
                         # TODO: implement a function to update the heatmap related to damping vs freq cluster
 
         else:  # Parallel loop
-            print("Running IAOMA-Phase 1 (parallel mode)...")
+            print("Running IAOMA-Phase 2 (parallel mode)...")
             logging.info(
                 "====================================================================================================="
             )
-            logging.info("Running IAOMA-Phase 1 (parallel mode)...")
+            logging.info("Running IAOMA-Phase 2 (parallel mode)...")
 
             # TODO: Implement some controls on Nsim_batch and NsimPh1 to optimize the parallel loop
             for sim in range(
@@ -242,8 +242,8 @@ class IAOMAPhase2(IAOMAPhase1):
                         simbatch_res[ii][1]
                     )  # discarded_qmc_samples[ID] -> every ID element contains two lists [[qmc_sample, qmc_sample_unitary]]
 
-                self.dump_sim_results_to_file(self.sim_results)
-                self.dump_discarded_qmc_samples_to_file(self.discarded_qmc_samples)
+                self._dump_sim_results_to_file(self.sim_results)
+                self._dump_discarded_qmc_samples_to_file(self.discarded_qmc_samples)
 
                 self.Results.add_new_sim_results(self.sim_results)
                 self.Results.add_new_discarded_qmc_samples(self.discarded_qmc_samples)
@@ -292,12 +292,12 @@ class IAOMAPhase2(IAOMAPhase1):
                         break
 
                 # plot overlapped stab diag density every batch of analysis, diagnostic plot
-                if sim == 0 and progressive_plot_flag:
+                if sim == Nsim_phase1 and progressive_plot_flag:
                     # plot_overlap_stab_diag()
 
                     fig, ax, heatmap, xedges, yedges, im = (
                         self._progressive_plot_overlap_stab_diag(
-                            self.sim_results,
+                            self.Results.sim_results,
                             plt_resolution=self.plt_resolution,
                             sim=self.Nsim_batch - 1,
                             update_flag=False,
@@ -312,12 +312,12 @@ class IAOMAPhase2(IAOMAPhase1):
                     # TODO: implement a function to update the heatmap related to damping vs freq cluster
                 elif progressive_plot_flag:
                     # update_overlap_stab_diag()
-                    new_sim_results = []
-                    for ii in range(sim, sim + self.Nsim_batch):
-                        new_sim_results.append(self.sim_results[ii])
+                    # new_sim_results = []
+                    # for ii in range(sim, sim + self.Nsim_batch):
+                    #     new_sim_results.append(self.sim_results)
                     fig, ax, heatmap, xedges, yedges, im = (
                         self._progressive_plot_overlap_stab_diag(
-                            new_sim_results,
+                            self.sim_results,
                             plt_resolution=self.plt_resolution,
                             sim=sim + self.Nsim_batch - 1,
                             update_flag=True,

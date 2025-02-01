@@ -8,9 +8,12 @@ import matplotlib.pyplot as plt
 from scipy.stats import qmc
 import logging
 from sklearn.ensemble import RandomForestClassifier
+import matplotlib
+
+matplotlib.use("agg")
 
 logging.basicConfig(
-    filename="iaoma_run.log",
+    filename=os.getcwd()+os.sep+"iaoma_run.log",
     level=logging.INFO,
     format="%(asctime)s - %(message)s",
     filemode="a",
@@ -42,27 +45,99 @@ if platform.system() == "Linux":
 
         return decorator
 else:
-    import threading
+    from threading import Thread, Event
+    import functools
+    import time
+    import ctypes
 
-    def timeout(seconds):
-        def decorator(func):
-            @functools.wraps(func)
-            def wrapper(*args, **kwargs):
-                result = [None]
+def _async_raise(thread_obj, exception):
+    """Raises an exception in the threads with id tid"""
+    if not thread_obj.is_alive():
+        return
+    
+    thread_id = thread_obj.ident
+    if thread_id is None:
+        return
+    
+    # Do the magic
+    ret = ctypes.pythonapi.PyThreadState_SetAsyncExc(ctypes.c_long(thread_id), 
+                                                    ctypes.py_object(exception))
+    if ret == 0:
+        raise ValueError("Invalid thread ID")
+    elif ret > 1:
+        # If more than one thread affected, something went wrong, clear state
+        ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id, None)
+        raise SystemError("PyThreadState_SetAsyncExc failed")
 
-                def target():
-                    result[0] = func(*args, **kwargs)
+def timeout(seconds):
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            res = [TimeoutError()]
+            finished = Event()
+            
+            def newFunc():
+                try:
+                    res[0] = func(*args, **kwargs)
+                except Exception as e:
+                    res[0] = e
+                finally:
+                    finished.set()
+                    
+            t = Thread(target=newFunc)
+            t.daemon = True
+            
+            try:
+                t.start()
+                # Wait for either the function to finish or timeout
+                finished_in_time = finished.wait(seconds)
+                if not finished_in_time:
+                    _async_raise(t, TimeoutError)
+                    # Give the thread a moment to die
+                    time.sleep(0.1)
+            except Exception as e:
+                print('error starting thread')
+                raise e
+                
+            ret = res[0]
+            if isinstance(ret, BaseException):
+                raise ret
+            return ret
+        
+        return wrapper
+    return decorator
 
-                thread = threading.Thread(target=target)
-                thread.start()
-                thread.join(seconds)
-                if thread.is_alive():
-                    raise TimeoutError()
-                return result[0]
 
-            return wrapper
 
-        return decorator
+# FUNZIONE TESTING TIMEOUT SU WINDOWS
+def esegui(stringa, seconds):
+
+    @timeout(seconds)
+    def esecuzione_lunga(stringa):
+        print(stringa)
+        k=0.0
+        while k<1000: # arriva a circa 74  per 5 secondi
+            k += 0.001
+            print(k)
+
+        return k
+    
+    
+    try:
+        esecuzione_lunga(stringa)
+    except Exception as e:
+        print('funzione esecuzione lunga timeout....')
+        print(e)
+
+
+
+
+
+
+
+
+
+
 
 
 def run_SSICov_with_timeout(
@@ -326,3 +401,14 @@ def update_heatmap(new_x, new_y, heatmap, im, xedges, yedges):
     im.set_data(heatmap.T)
     plt.draw()
     return im, heatmap
+
+
+
+
+
+
+
+
+
+
+

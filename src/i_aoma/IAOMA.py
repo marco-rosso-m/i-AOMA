@@ -177,7 +177,7 @@ class IAOMA:
     # LEARNING PHASE BETWEEN PHASE 1 AND PHASE 2
 
     # TRAINING INTELLIGENT CORE RF MODEL
-    def rf_intelligent_core_training(self, ICTHRESH: float = 0.2):
+    def rf_intelligent_core_training(self, ICTHRESH: float = 0.2, output_path: str = os.getcwd()):
         logging.info(
             "====================================================================================================="
         )
@@ -241,6 +241,9 @@ class IAOMA:
         # is it possible to explore the density plot verifying if the RF is able to get anyway some most probable region or not?
         print("Intelligent Core RF trained... ")
         logging.error("Intelligent Core RF trained... ")
+        
+        self.dump_clf_model_to_file(output_path=self.output_path)
+
         return self.clf_model
 
     # PHASE 2 INITIALIZATION AND RUN
@@ -284,179 +287,139 @@ class IAOMA:
             )
             return None
 
-    def dump_all_results_to_file(
-        self, output_path: str = os.getcwd() + os.sep + "IAOMA_Results"
-    ):
-        self.dump_sim_results_to_file(output_path + os.sep + "Backup_All_Sim_Results")
-        self.dump_sim_results_to_file(output_path + os.sep + "Backup_All_Sim_Results")
 
-    def dump_sim_results_to_file(
-        self,
-        output_path: str = os.getcwd()
-        + os.sep
-        + "IAOMA_Results"
-        + os.sep
-        + "Backup_All_Sim_Results",
-    ):
-        for file in glob.glob(output_path + os.sep + "*.pkl"):
-            os.remove(file)
+# ===================================================================================================== 
+# SAVE RESULTS TO FILES
+    def export_all_results_to_file(self, optional_prefix : str = ""):
+        self.dump_sim_results_to_file(self.output_path + os.sep + optional_prefix)
+        self.dump_clusters_to_file(self.output_path + os.sep + optional_prefix)
+
+        print("All results exported to files.")
+        logging.info("All results exported to files.")
+
+    def dump_clf_model_to_file(self, output_path: str = os.getcwd()):
         with open(
-            output_path + os.sep + f"{len(self.Results.sim_results):d}.pkl", "wb"
+            output_path
+            + os.sep
+            + f"clf_model.pkl",
+            "wb",
         ) as backup_file:
-            pickle.dump(self.Results.sim_results, backup_file)
+            pickle.dump(self.clf_model, backup_file)
 
-    def dump_discarded_qmc_samples_to_file(
-        self,
-        output_path: str = os.getcwd()
-        + os.sep
-        + "IAOMA_Results"
-        + os.sep
-        + "Backup_Discarded_Samples",
-    ):
-        for file in glob.glob(output_path + os.sep + "*.pkl"):
-            os.remove(file)
+    def dump_sim_results_to_file(self, output_path: str = os.getcwd()):
+        data_to_save = {
+            'sim_results': self.Results.sim_results,
+            'discarded_qmc_samples': self.Results.discarded_qmc_samples
+        }
         with open(
-            output_path + os.sep + f"{len(self.Results.sim_results):d}.pkl", "wb"
+            output_path
+            + os.sep
+            + f"sim_results_{len(self.Results.sim_results):d}_simulations_and_discarded_samples.pkl",
+            "wb",
         ) as backup_file:
-            pickle.dump(self.Results.discarded_qmc_samples, backup_file)
+            pickle.dump(data_to_save, backup_file)
 
-    def load_sim_results_from_a_file(
-        self, file_path: str = os.getcwd() + os.sep + "IAOMA_Results"
-    ):
-        pass
+    def dump_clusters_to_file(self, output_path: str = os.getcwd()):
+        data_to_save = {
+            'clusters': self.Results.clusters,
+            'clusters_id': self.Results.clusters_id,
+            'KDEPROMINENCE': self.Results.KDEPROMINENCE , 
+            'bw': self.Results.bw ,
+            'current_freq_cluster_id': self.Results.current_freq_cluster_id
+        }
+        with open(
+            output_path
+            + os.sep
+            + f"modal_clusters_{len(self.Results.sim_results):d}_simulations.pkl",
+            "wb",
+        ) as backup_file:
+            pickle.dump(data_to_save, backup_file)
 
-    # def dump_phase1_to_file(self, output_path: str = None):
-    #     # TODO: implement checks before saving or at least a try/except block
-    #     if output_path is not None:
-    #         self.phase1._dump_metadata_to_file_phase1(output_path)
-    #         self.phase1._dump_results_to_file_phase1(output_path)
-    #     elif hasattr(self.phase1, "output_path_phase1"):
-    #         self.phase1._dump_metadata_to_file_phase1(self.phase1.output_path_phase1)
-    #         self.phase1._dump_results_to_file_phase1(self.phase1.output_path_phase1)
-    #     else:
-    #         print("No results to save. Run Phase 1 first.")
-    #         logging.info("No results to save. Run Phase 1 first.")
-    #         return None
+# ===================================================================================================== 
+# LOADING FROM FILES
+    def load_all_results_from_files(self, files_path: list):
+        """
+        Load all results from the specified files.
 
-    # def load_phase1_from_file(self, phase1_files: list):
-    #     """
-    #     Load Phase 1 results from files.
-    #     """
-    #     # TODO: implement checks on file before loading or at least a try/except block
-    #     print("Loading Phase 1 results...")
-    #     logging.info("Loading Phase 1 results...")
-    #     self.phase1 = IAOMAPhase1(self)
-    #     self.phase1._load_metadata_from_file_phase1(phase1_files[0])
-    #     self.phase1._load_results_from_file_phase1(phase1_files[1])
+        Parameters:
+        files_path (list of str): A list containing 2 file paths. Each path should be a string
+                                    representing the location of a file to be loaded. The list should
+                                    have the following format:
+                                    [
+                                        'path_to_sim_results.pkl',  # Path to the first file
+                                        'path_to_discarded_qmc_samples.pkl',  # Path to the second file
+                                        'path_to_clusters.pkl',  # Path to the third file
+                                        'path_to_clusters_id.pkl'   # Path to the fourth file
+                                    ]
 
-    def run_phase2_old(
-        self,
-        NsimPh2: int = 1,
-        n_jobs: int = -1,
-        timeout_seconds: int = 30,
-        Nsim_batch: int = 1,
-        Nsim_batch_conv_check: int = 1,
-        set_seed=None,
-        beta_distribution_percentile: float = 0.99,  # percentile to be used to define the prominence threshold
-        plt_resolution: dict = {"freq": 0.5, "damp": 0.001, "order": 1},
-        fr_diff_threshold: float = 0.10,  # Determine precision if two frequencies can be considered different cluster based on a threshold
-        signifiant_digits_cluster_fr_keys: int = 2,  # Determine the number of significant digits to round the frequency cluster key
-        plot_clusters_damp_kde: bool = True,
-        plt_stab_diag_backup: bool = False,
-    ):
-        if hasattr(
-            self.phase1, "clf_model"
-        ):  # if phase 1 intelligent core already trained
-            if hasattr(self, "phase1"):  # if phase 1 already run
-                print("Starting Phase 2...")
-                logging.info("Starting Phase 2...")
-                self.phase2 = IAOMAPhase2(
-                    self,
-                    self.phase1.Nsim_batch,
-                    self.phase1.KDEPROMINENCE,
-                    self.phase1.bw,
-                    self.phase1.clusters,
-                    self.phase1.clf_model,
-                    self.phase1.sim_results,
-                    self.phase1.discarded_qmc_samples,
-                    self.phase1.NsimPh1,
-                )
-                fig, ax = self.phase2.loop_phase2_operations(
-                    NsimPh2,
-                    n_jobs,
-                    timeout_seconds,
-                    Nsim_batch,
-                    Nsim_batch_conv_check,
-                    set_seed,
-                    beta_distribution_percentile,
-                    plt_resolution,
-                    fr_diff_threshold,
-                    signifiant_digits_cluster_fr_keys,
-                    plot_clusters_damp_kde,
-                    plt_stab_diag_backup,
-                )
-                return fig, ax
-            else:
-                print("Phase 1 not run yet. Run Phase 1 first.")
-                logging.info("Phase 1 not run yet. Run Phase 1 first.")
-                return None
+        Returns:
+        tuple: A tuple containing the loaded results from the four files.
+
+        Raises:
+        FileNotFoundError: If any of the files do not exist.
+        """
+        if len(files_path) != 2 :
+            print("Error: 2 files are needed to load all results.")
+            print("""Please provide a list of the path for the following 2 files in this specific order: 
+                  file 1 is a dict containing two keys sim_results and discarded_qmc_samples
+                  file 1 is a dict containing two keys clusters and clusters_id """)
         else:
-            print(
-                "Phase 1 intelligent core not trained yet. Train the Phase 1 intelligent core first."
-            )
-            logging.info(
-                "Phase 1 intelligent core not trained yet. Train the Phase 1 intelligent core first."
-            )
+            try:
+                error_flag = 0
+                self.load_sim_results_from_file(files_path[0])
+                error_flag = 1
+                self.load_clusters_from_file(files_path[1])
+            except Exception as e:
+                if error_flag == 0:
+                    print(f"Error loading sim_results file: {e}")
+                elif error_flag == 1:
+                    print(f"Error loading clusters file: {e}")
+
+
+
+    def load_clf_model_from_file(self, file_path):
+        try:
+            with open(file_path, 'rb') as file:
+                self.clf_model = pickle.load(file)
+        except Exception as e:
+            print(f"Error loading file: {e}")
             return None
+    
 
-    # def run_phase2(self, phase1_object):
-    #     """
-    #     Creates an instance of IAOMAPhase2 using Phase 1 results.
-    #     """
-    #     if hasattr(self, "phase1"):  # if phase 1 already run
-    #         print("Starting Phase 2...")
-    #         logging.info("Starting Phase 2...")
-    #         self.phase2 = IAOMAPhase2(phase1_object)
-    #         self.phase2.loop_phase2_operations()
-    #         # return phase2  # Return phase2 object for further use
-    #     else:
-    #         print("Phase 1 not run yet. Run Phase 1 first.")
-    #         logging.info("Phase 1 not run yet. Run Phase 1 first.")
-    #         return None
-
-    # def dump_results_to_file(self):
-    #     """
-    #     Save the results of Phase 1 and Phase 2 in a file.
-    #     """
-    #     if hasattr(self, 'phase2'):
-    #         # if phase 2 already run, then save both phase 1 and 2
-    #         with shelve.open(self.output_path+os.sep+'backup_shelve') as db:
-    #             db['phase1'] = self.phase1
-    #             db['phase2'] = self.phase2
-    #     elif hasattr(self, 'phase1'):
-    #         # if phase 1 already run, then save both phase 1 and 2
-    #         with shelve.open(self.output_path+os.sep+'backup_shelve') as db:
-    #             db['phase1'] = self.phase1
-    #     else:
-    #         print("No results to save. Run Phase 1 and Phase 2 first.")
-    #         logging.info("No results to save. Run Phase 1 and Phase 2 first.")
-    #         return None
-
-    # def dump_results_to_file_pickle(self):
-    #     """
-    #     Save the results of Phase 1 and Phase 2 in a file.
-    #     """
-    #     if hasattr(self, 'phase2'):
-    #         # if phase 2 already run, then save both phase 1 and 2
-    #         with open(self.output_path+os.sep+'backup_pickle_phase1.pkl.gz', 'wb') as backup_file:
-    #             pickle.dump(self.phase1, backup_file)
-    #         with shelve.open(self.output_path+os.sep+'backup_pickle_phase2', 'wb') as backup_file:
-    #             pickle.dump(self.phase2, backup_file)
-    #     elif hasattr(self, 'phase1'):
-    #         # if phase 1 already run, then save both phase 1 and 2
-    #         with open(self.output_path+os.sep+'backup_pickle_phase1.pkl.gz', 'wb') as backup_file:
-    #             pickle.dump(self.phase1, backup_file)
-    #     else:
-    #         print("No results to save. Run Phase 1 and Phase 2 first.")
-    #         logging.info("No results to save. Run Phase 1 and Phase 2 first.")
-    #         return None
+    def load_sim_results_from_file(self, file_path):
+        """        
+            data_stored = {
+                'sim_results': self.Results.sim_results,
+                'discarded_qmc_samples': self.Results.discarded_qmc_samples
+            }
+        """
+        try:
+            with open(file_path, 'rb') as file:
+                loaded_data = pickle.load(file)
+            self.Results.sim_results = loaded_data['sim_results']
+            self.Results.discarded_qmc_samples = loaded_data['discarded_qmc_samples']
+        except Exception as e:
+            print(f"Error loading file: {e}")
+            return None
+        
+    def load_clusters_from_file(self, file_path):
+        """        
+            data_to_save = {
+                'clusters': self.Results.clusters,
+                'clusters_id': self.Results.clusters_id,
+                'KDEPROMINENCE': self.Results.KDEPROMINENCE , 
+                'bw': self.Results.bw ,
+                'current_freq_cluster_id': self.Results.current_freq_cluster_id
+            }
+        """
+        try:
+            with open(file_path, 'rb') as file:
+                loaded_data = pickle.load(file)
+            self.Results.clusters = loaded_data['clusters']
+            self.Results.clusters_id = loaded_data['clusters_id']
+            self.Results.KDEPROMINENCE = loaded_data['KDEPROMINENCE']
+            self.Results.bw = loaded_data['bw']
+            self.Results.current_freq_cluster_id = loaded_data['current_freq_cluster_id']
+        except Exception as e:
+            print(f"Error loading file: {e}")
+            return None

@@ -1,0 +1,141 @@
+"""
+Example: Timber Beam i-AOMA ver 2.0
+
+References: Pasca, D. P., Aloisio, A., Fragiacomo, M., & Tomasi, R. (2021).
+            Dynamic characterization of timber floor subassemblies: Sensitivity analysis and modeling issues.
+            Journal of Structural Engineering, 147(12), 05021008.
+
+@author: Marco Martino Rosso (marco.rosso@polito.it)
+"""
+
+# %% IMPORTS
+import numpy as np
+import pandas as pd
+import os
+import matplotlib.pyplot as plt
+import matplotlib
+import mplcursors
+
+from i_aoma.IAOMA import IAOMA
+
+# %% USER DEFINITIONS
+# data path
+data_path = "examples/run_example_script/test_data"
+data_filename = "TRAVE1(AF, 1cuscino)_Job1_2020_05_28_07_16_09_001_001"
+data_filename_ext = ".xlsx"
+# output path
+output_path = "examples/run_example_script/Results/01_02_25_loading_previous_analysis"
+# Sampling Frequency [Hz]
+fs = 1200
+# fundamental frequency [Hz]
+fundfreq = 65.98
+# Number of simulations to be done in phase 1
+NsimPh1 = 20
+# Number of batch simulations to be done in parallel
+Nsim_batch = 10
+# Number of core to use for parallel computation (-1 to use all available, 0 to disable parallel computation)
+n_jobs = 5
+# time out for each simulation in phase 1 [s]
+timeout_seconds = 30
+
+# %% PRE-INITIALIZATION
+# set matplotlib backend
+matplotlib.get_backend()
+matplotlib.use("qtagg")
+plt.plot([0, 0])
+plt.close()
+# Create output folder if it does not exist
+if not os.path.exists(output_path):
+    os.makedirs(output_path)
+
+# %% DATA LOADING and conversion to NumPy array (rows: time, columns: sensors)
+if not os.path.exists(data_path + os.sep + data_filename + ".parquet"):
+    print("Data file not found, creating it...")
+    data = pd.read_excel(
+        data_path + os.sep + data_filename + data_filename_ext, header=None
+    ).dropna()
+    data.to_parquet(data_path + os.sep + data_filename + ".parquet")
+
+data = pd.read_parquet(data_path + os.sep + data_filename + ".parquet").to_numpy()
+
+# %% IAOMA SETUP
+# create instance of iAOMA setup
+Timber_ss = IAOMA(
+    data,
+    fs=fs,
+    ff=fundfreq,
+    output_path=output_path,
+)
+
+
+Timber_ss.load_clf_model_from_file(
+    r'examples\run_example_script\Results\01_02_25\clf_model.pkl'
+)
+
+
+pickle_paths = [
+    r"examples\run_example_script\Results\01_02_25\sim_results_100_simulations_and_discarded_samples.pkl",
+    r"examples\run_example_script\Results\01_02_25\modal_clusters_100_simulations.pkl",
+]
+
+Timber_ss.load_all_results_from_files(files_path = pickle_paths)
+
+
+
+freq_id = Timber_ss.Results.clusters_id
+
+fig, ax, cluster1 = Timber_ss.Results.plot_damping_kde_for_selected_cluster(freq_id[0])
+
+
+
+mode_shapes_clusters = Timber_ss.Results.get_overlapped_mode_shapes_for_all_clusters()
+
+mode_shapes_clusters_mean = [
+    np.mean(mode_shapes_clusters[freq_id[ii]], axis=0) for ii in range(len(freq_id))
+]
+mode_shapes_clusters_std = [
+    np.std(mode_shapes_clusters[freq_id[ii]], axis=0) for ii in range(len(freq_id))
+]
+samplecovmat = [
+    np.trace(np.cov(mode_shapes_clusters[freq_id[ii]].T).real)
+    for ii in range(len(freq_id))
+]
+print(samplecovmat)
+
+
+
+
+
+
+mode_shapes_clusters[freq_id[0]]
+
+# Plot the unitary circumference
+theta = np.linspace(0, 2 * np.pi, 100)
+x = np.cos(theta)
+y = np.sin(theta)
+
+plt.figure(figsize=(8, 6))
+plt.plot(x, y, label='Unitary Circumference', c='k')
+
+# Scatter plot for each component of mode_shapes_clusters[freq_id[0]]
+mode_shapes = mode_shapes_clusters[freq_id[0]]
+colors = plt.cm.jet(np.linspace(0, 1, mode_shapes.shape[1]))
+
+for i in range(mode_shapes.shape[1]):
+    plt.scatter(mode_shapes[:, i].real, mode_shapes[:, i].imag, color=colors[i], label=f'Component {i+1}', alpha=0.5)
+
+plt.xlabel('Real Part')
+plt.ylabel('Imaginary Part')
+plt.title(f'Mode Shape Components at {freq_id[0]} Hz')
+plt.legend(loc='upper left', bbox_to_anchor=(1, 1))
+plt.grid(True)
+plt.gca().set_xticks(np.arange(-1.5, 1.6, 0.5))  # Adjust the range and spacing as needed
+plt.gca().set_yticks(np.arange(-1.5, 1.6, 0.5))  # Adjust the range and spacing as needed
+
+plt.axis('equal')
+plt.tight_layout()
+
+
+
+
+print("End of the script")

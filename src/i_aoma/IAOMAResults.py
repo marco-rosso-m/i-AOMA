@@ -9,6 +9,7 @@ import os
 
 from pyoma2.functions.gen import MAC
 
+plt.ion()  # Enable interactive mode
 
 class IAOMAResults:
     """
@@ -561,7 +562,7 @@ class IAOMAResults:
             :, np.argsort(cluster1[2, :])
         ]  # sort data by damping in increasing order within the cluster
 
-        # KDE along frequency
+        # KDE along damping
         KDE_cluster = FFTKDE(kernel="gaussian", bw="ISJ").fit(cluster1[2, :])
         # bw_cluster = KDE_cluster.bw
         kde_xi_x, kde_xi_y = KDE_cluster.evaluate(
@@ -754,3 +755,73 @@ class IAOMAResults:
         # list_sim_results[0]['Fn_poles'][mask]
         # list_sim_results[0]['Xi_poles'][mask]
         # list_sim_results[0]['Phi_poles'][mask]
+
+
+    def plot_damping_kde_for_selected_cluster(self, freq_id):
+
+        data = self.get_aggregated_data_format()
+
+        cluster1 = data[
+            :, (data[0, :] >= freq_id - self.bw) & (data[0, :] <= freq_id + self.bw)
+        ]
+
+        cluster1 = cluster1[
+            :, np.argsort(cluster1[2, :])
+        ]  # sort data by damping in increasing order within the cluster
+
+        # KDE along damping
+        KDE_cluster = FFTKDE(kernel="gaussian", bw="ISJ").fit(cluster1[2, :])
+        # bw_cluster = KDE_cluster.bw
+        kde_xi_x, kde_xi_y = KDE_cluster.evaluate(
+            int(
+                self.SingleSetup["SSIcov"].run_params.hc["xi_max"]
+                / self.plt_resolution["damp"]
+            )
+        )
+        kde_xi_ynorm = kde_xi_y / max(kde_xi_y)
+
+        cluster1 = cluster1[
+            :,
+            (
+                cluster1[2, :]
+                >= kde_xi_x[np.argmax(kde_xi_ynorm)] - self.plt_resolution["damp"]
+            )
+            & (
+                cluster1[2, :]
+                <= kde_xi_x[np.argmax(kde_xi_ynorm)] + self.plt_resolution["damp"]
+            ),
+        ]
+
+
+        fig, ax = plt.subplots(figsize=(10, 4), tight_layout=True)
+        ax.set_title(f"KDE along damping within cluster at {freq_id:.2f} Hz")
+        ax.set_ylabel("Normalized KDE [-]")
+        ax.set_xlabel("Damping Ratios [-]")
+        ax.plot(
+            kde_xi_x, kde_xi_ynorm, color="blue", label=f"KDE (bw={self.bw:.2e})"
+        )
+        ax.plot(
+            kde_xi_x[np.argmax(kde_xi_ynorm)],
+            kde_xi_ynorm[np.argmax(kde_xi_ynorm)],
+            "ro",
+            markersize=7,
+            label="Abs. Max. Peak",
+        )
+        plt.ylim(0, 1)
+        plt.xlim(0, self.SingleSetup["SSIcov"].run_params.hc["xi_max"])
+        plt.plot(
+            [kde_xi_x[np.argmax(kde_xi_ynorm)] - self.plt_resolution["damp"]] * 2,
+            [0, 1],
+            "r--",
+            label="Retaining Bands",
+        )
+        plt.plot(
+            [kde_xi_x[np.argmax(kde_xi_ynorm)] + self.plt_resolution["damp"]] * 2,
+            [0, 1],
+            "r--",
+        )
+        ax.legend()
+        plt.ylim(0, 1)
+        plt.xlim(0, self.SingleSetup["SSIcov"].run_params.hc["xi_max"])
+        # mplcursors.cursor()
+        return fig, ax, cluster1

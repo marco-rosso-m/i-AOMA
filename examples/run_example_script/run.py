@@ -24,15 +24,15 @@ data_path = "examples/run_example_script/test_data"
 data_filename = "TRAVE1(AF, 1cuscino)_Job1_2020_05_28_07_16_09_001_001"
 data_filename_ext = ".xlsx"
 # output path
-output_path = "examples/run_example_script/Results/trave1_results_1cuscino_17_01_25"
+output_path = "examples/run_example_script/Results/01_02_25"
 # Sampling Frequency [Hz]
 fs = 1200
 # fundamental frequency [Hz]
 fundfreq = 65.98
 # Number of simulations to be done in phase 1
-NsimPh1 = 20
+NsimPh1 = 50
 # Number of batch simulations to be done in parallel
-Nsim_batch = 10
+Nsim_batch = 50
 # Number of core to use for parallel computation (-1 to use all available, 0 to disable parallel computation)
 n_jobs = -1
 # time out for each simulation in phase 1 [s]
@@ -166,7 +166,7 @@ rf_model = Timber_ss.rf_intelligent_core_training()
 
 NsimPh2 = 200
 Nsim_batch2 = 50  # batch of analysis and for convergence check
-n_jobs2 = 1
+n_jobs2 = -1
 
 Timber_ss.run_phase2(
     NsimPh_max=NsimPh2,
@@ -174,7 +174,7 @@ Timber_ss.run_phase2(
     timeout_seconds=timeout_seconds,
     Nsim_batch=Nsim_batch2,
     plt_stab_diag_backup=True,
-    progressive_plot_flag=False,
+    progressive_plot_flag=True,
 )
 
 # Timber_ss.run_phase2(
@@ -192,5 +192,6 @@ print("End of phase 2")
 IC_val_list = Timber_ss.Results.compute_IC_metric()
 _, _ = Timber_ss.Results.plot_ic_graph()
 
+Timber_ss.export_all_results_to_file()
 
 print("End of the script")

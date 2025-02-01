@@ -8,6 +8,8 @@ import glob
 
 from .helper_ssicov_timeout import run_SSICov_with_timeout, update_heatmap
 
+plt.ion()  # Enable interactive mode
+
 # Set up logging
 logging.basicConfig(
     filename="iaoma_run.log",
